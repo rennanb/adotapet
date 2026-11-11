@@ -1,0 +1,296 @@
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { Outlet, Link, NavLink, useLocation, useRouteError } from "react-router";
+import {
+  Code2,
+  HeartHandshake,
+  Home,
+  Info,
+  LayoutDashboard,
+  PawPrint,
+  QrCode,
+  ScanLine,
+  Settings,
+  UserRound,
+  WifiOff,
+  X,
+  ClipboardList,
+} from "lucide-react";
+import { Brand, Button, TagCard } from "./ui";
+
+const AboutContext = createContext({ open: () => {} });
+export const useAbout = () => useContext(AboutContext);
+
+function AboutSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    ref.current?.focus();
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key !== "Tab" || !ref.current) return;
+      const focusable = Array.from(
+        ref.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      previousFocus?.focus();
+    };
+  }, [open, onClose]);
+  if (!open) return null;
+  return (
+    <div className="sheet-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+      <div
+        className="sheet"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="about-title"
+        tabIndex={-1}
+        ref={ref}
+      >
+        <span className="sheet-handle" />
+        <button className="icon-button sheet-close" onClick={onClose} aria-label="Fechar">
+          <X />
+        </button>
+        <span className="project-seal">
+          Projeto interdisciplinar, Engenharia de Software, FAM, CONTEEX 2026
+        </span>
+        <h2 id="about-title">Sobre o projeto</h2>
+        <p>
+          O AdotaPet aproxima ONGs e famílias usando uma coisa simples: uma plaquinha com QR Code e
+          uma história bem contada.
+        </p>
+        <p>
+          Cada solicitação chega organizada e com protocolo, para que a equipe dedique menos tempo
+          às mensagens e mais tempo aos animais.
+        </p>
+        <div className="about-steps">
+          {[
+            [ScanLine, "Escaneie o QR"],
+            [PawPrint, "Conheça o pet"],
+            [HeartHandshake, "Envie a solicitação"],
+          ].map(([Icon, text], i) => {
+            const I = Icon as typeof PawPrint;
+            return (
+              <div key={String(text)}>
+                <span>
+                  <I size={20} />
+                </span>
+                <b>
+                  {i + 1}. {String(text)}
+                </b>
+              </div>
+            );
+          })}
+        </div>
+        <div className="about-qr">
+          <QrCode size={62} />
+          <span>
+            adotapet
+            <br />
+            <b>uma história mora aqui</b>
+          </span>
+        </div>
+        <p className="made-by">
+          <b>Turma do 2º semestre de Engenharia de Software, FAM</b>
+          <br />
+          Emerson, Luiz, Rennan, Raul, Gennik e Nicolas ·{" "}
+          <a
+            href="https://github.com/rennanb/sistema_web_adocao_responsavel"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Code2 size={15} /> Ver o código no GitHub
+          </a>
+        </p>
+        <Button onClick={onClose}>Entendi</Button>
+      </div>
+    </div>
+  );
+}
+
+export function RootShell() {
+  const [about, setAbout] = useState(false);
+  const [online, setOnline] = useState(() => navigator.onLine);
+  const location = useLocation();
+  const closeAbout = useCallback(() => setAbout(false), []);
+  const openAbout = useCallback(() => setAbout(true), []);
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [location.pathname]);
+  useEffect(() => {
+    const updateConnection = () => setOnline(navigator.onLine);
+    window.addEventListener("online", updateConnection);
+    window.addEventListener("offline", updateConnection);
+    return () => {
+      window.removeEventListener("online", updateConnection);
+      window.removeEventListener("offline", updateConnection);
+    };
+  }, []);
+  return (
+    <AboutContext.Provider value={{ open: openAbout }}>
+      {!online && (
+        <div className="offline-banner" role="status" aria-live="polite">
+          <WifiOff />
+          Sem conexão. Você pode continuar preenchendo, mas algumas ações precisarão ser reenviadas
+          quando a internet voltar.
+        </div>
+      )}
+      <Outlet />
+      <AboutSheet open={about} onClose={closeAbout} />
+    </AboutContext.Provider>
+  );
+}
+
+export function RouteErrorPage() {
+  const error = useRouteError();
+  console.error(error);
+  return (
+    <main className="simple-page">
+      <PublicTopbar />
+      <div className="narrow error-page">
+        <span className="mail-icon">
+          <PawPrint />
+        </span>
+        <span className="eyebrow">Algo saiu do caminho</span>
+        <h1>Não conseguimos abrir esta página</h1>
+        <p>Tente recarregar. Se o problema continuar, volte para o início do AdotaPet.</p>
+        <Button onClick={() => window.location.reload()}>Recarregar página</Button>
+        <Link className="text-link" to="/entrar">
+          Voltar ao início
+        </Link>
+      </div>
+    </main>
+  );
+}
+
+export function PublicTopbar({ overlay = false }: { overlay?: boolean }) {
+  const { open } = useAbout();
+  return (
+    <header className={`public-topbar ${overlay ? "overlay" : ""}`}>
+      <Brand />
+      <button className="icon-button" aria-label="Sobre o projeto" onClick={open}>
+        <Info />
+      </button>
+    </header>
+  );
+}
+
+const nav = [
+  ["/painel", Home, "Início"],
+  ["/painel/animais", PawPrint, "Pets"],
+  ["/painel/solicitacoes", ClipboardList, "Solicitações"],
+  ["/painel/ong", UserRound, "ONG"],
+];
+
+export function DashboardShell() {
+  const { open } = useAbout();
+  return (
+    <div className="dashboard-shell">
+      <aside className="sidebar">
+        <Brand />
+        <nav>
+          {nav.map(([to, Icon, label]) => {
+            const I = Icon as typeof Home;
+            return (
+              <NavLink key={String(to)} to={String(to)} end={to === "/painel"}>
+                <I />
+                {String(label)}
+              </NavLink>
+            );
+          })}
+        </nav>
+        <div className="sidebar-foot">
+          <NavLink to="/painel/config">
+            <Settings />
+            Configurações
+          </NavLink>
+          <button onClick={open}>
+            <Info />
+            Sobre
+          </button>
+          <div className="user-mini">
+            <span>AP</span>
+            <p>
+              <b>Amigos de Patas</b>
+              <small>Equipe da ONG</small>
+            </p>
+          </div>
+        </div>
+      </aside>
+      <main className="dashboard-main">
+        <Outlet />
+      </main>
+      <nav className="bottom-nav">
+        {nav.map(([to, Icon, label]) => {
+          const I = Icon as typeof Home;
+          return (
+            <NavLink key={String(to)} to={String(to)} end={to === "/painel"}>
+              <I />
+              <span>{String(label)}</span>
+            </NavLink>
+          );
+        })}
+      </nav>
+    </div>
+  );
+}
+
+export function PageHeader({
+  title,
+  action,
+  eyebrow,
+  className = "",
+}: {
+  title: string;
+  action?: ReactNode;
+  eyebrow?: string;
+  className?: string;
+}) {
+  return (
+    <div className={`page-header ${className}`}>
+      <div>
+        {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+        <h1>{title}</h1>
+      </div>
+      {action}
+    </div>
+  );
+}
+
+export function AboutTag() {
+  const { open } = useAbout();
+  return (
+    <button className="about-trigger" onClick={open}>
+      <TagCard>
+        <span>
+          <Info size={19} />
+          <b>Sobre o projeto</b>
+        </span>
+        <small>Conheça a ideia por trás do AdotaPet</small>
+      </TagCard>
+    </button>
+  );
+}
