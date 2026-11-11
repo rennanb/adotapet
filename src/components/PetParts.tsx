@@ -217,7 +217,15 @@ export function QrActions(props: QrActionProps) {
     context.fillStyle = "#6b7280";
     context.font = "500 18px Inter";
     const footerY = format === "story" ? logicalHeight - 140 : logicalHeight - 72;
-    context.fillText(new URL(url).pathname.replace(/^\//, "adotapet.app/"), 64, footerY);
+    const printedUrl = (() => {
+      try {
+        const parsed = new URL(url);
+        return `${parsed.host}${parsed.pathname}`;
+      } catch {
+        return url.replace(/^https?:\/\//, "");
+      }
+    })();
+    context.fillText(printedUrl, 64, footerY);
     context.fillStyle = "#15181e";
     context.font = "600 20px Inter";
     context.fillText("Adote, não compre", logicalWidth - 270, footerY);

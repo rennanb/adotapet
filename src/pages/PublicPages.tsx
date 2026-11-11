@@ -22,7 +22,15 @@ import {
   ShieldCheck,
   Stethoscope,
 } from "lucide-react";
-import { ong, petObjectPosition, pets, petsBySlug, photos, states } from "../mocks";
+import {
+  getPublicBaseUrl,
+  ong,
+  petObjectPosition,
+  pets,
+  petsBySlug,
+  photos,
+  states,
+} from "../mocks";
 import { AboutTag, PublicTopbar } from "../components/Shells";
 import {
   BackLink,
@@ -453,56 +461,51 @@ export function SignupPage() {
   );
 }
 
+function useShare() {
+  const [message, setMessage] = useState<string | null>(null);
+  useEffect(() => {
+    if (!message) return;
+    const timer = window.setTimeout(() => setMessage(null), 2800);
+    return () => window.clearTimeout(timer);
+  }, [message]);
+  const share = async ({ title, text, url }: { title: string; text?: string; url: string }) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+        return;
+      } catch (error) {
+        if ((error as DOMException)?.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setMessage("Link copiado");
+    } catch {
+      setMessage("Não foi possível copiar o link");
+    }
+  };
+  return { share, message };
+}
+
 export function OngPage() {
-  const [photoTarget, setPhotoTarget] = useState<"cover" | "logo" | null>(null);
-  const [cover, setCover] = useState<PhotoAdjustment | null>({
-    src: photos.nina,
-    focalX: 50,
-    focalY: 30,
-    zoom: 1,
-  });
-  const [logo, setLogo] = useState<PhotoAdjustment | null>(null);
+  const { share, message } = useShare();
+  const ongUrl = `${getPublicBaseUrl()}/ong/${ong.slug}`;
+  const whatsappDigits = ong.whatsapp.replace(/\D/g, "");
+  const whatsappUrl = `https://wa.me/${
+    whatsappDigits.length <= 11 ? `55${whatsappDigits}` : whatsappDigits
+  }?text=${encodeURIComponent(
+    `Olá! Vi os pets da ${ong.name} no AdotaPet e quero saber mais sobre a adoção.`,
+  )}`;
   return (
     <main className="public-page">
       <PublicTopbar />
       <section className="ong-cover duotone">
-        {cover ? (
-          <img
-            src={cover.src}
-            alt=""
-            style={{
-              objectPosition: `${cover.focalX}% ${cover.focalY}%`,
-              transform: `scale(${cover.zoom})`,
-            }}
-          />
-        ) : (
-          <div className="cover-placeholder">
-            <Camera /> Adicionar capa
-          </div>
-        )}
-        <button className="cover-edit-button" onClick={() => setPhotoTarget("cover")}>
-          <Camera /> {cover ? "Editar capa" : "Adicionar capa"}
-        </button>
+        <img src={photos.nina} alt="" style={{ objectPosition: "50% 30%" }} />
       </section>
       <div className="content-1100 ong-profile">
-        <button
-          className="ong-logo"
-          onClick={() => setPhotoTarget("logo")}
-          aria-label="Alterar logo"
-        >
-          {logo ? (
-            <img
-              src={logo.src}
-              alt=""
-              style={{
-                objectPosition: `${logo.focalX}% ${logo.focalY}%`,
-                transform: `scale(${logo.zoom})`,
-              }}
-            />
-          ) : (
-            <span>AP</span>
-          )}
-        </button>
+        <div className="ong-logo">
+          <span>AP</span>
+        </div>
         <div className="ong-heading">
           <div>
             <h1>{ong.name}</h1>
@@ -515,8 +518,23 @@ export function OngPage() {
             </p>
           </div>
           <div className="button-row">
-            <Button icon={<MessageCircle />}>Falar no WhatsApp</Button>
-            <Button variant="secondary" icon={<Share2 />}>
+            <Button
+              icon={<MessageCircle />}
+              onClick={() => window.open(whatsappUrl, "_blank", "noopener,noreferrer")}
+            >
+              Falar no WhatsApp
+            </Button>
+            <Button
+              variant="secondary"
+              icon={<Share2 />}
+              onClick={() =>
+                share({
+                  title: ong.name,
+                  text: `Conheça os pets da ${ong.name}`,
+                  url: ongUrl,
+                })
+              }
+            >
               Compartilhar
             </Button>
           </div>
@@ -551,18 +569,11 @@ export function OngPage() {
             ))}
         </div>
       </div>
-      <PhotoAdjuster
-        open={photoTarget !== null}
-        title={photoTarget === "cover" ? "Ajustar capa" : "Alterar logo"}
-        aspect={photoTarget === "cover" ? "3 / 1" : "1 / 1"}
-        initial={photoTarget === "logo" ? logo?.src || photos.caramelo : cover?.src || photos.nina}
-        onClose={() => setPhotoTarget(null)}
-        onUse={(adjustment) => {
-          if (photoTarget === "logo") setLogo(adjustment);
-          else setCover(adjustment);
-          setPhotoTarget(null);
-        }}
-      />
+      {message && (
+        <div className="toast" role="status">
+          {message}
+        </div>
+      )}
     </main>
   );
 }
@@ -570,6 +581,7 @@ export function OngPage() {
 export function PetPage() {
   const { slug } = useParams();
   const pet = (slug ? petsBySlug[slug] : undefined) || pets[0];
+  const { share, message } = useShare();
   if (pet.status !== "disponível") return <UnavailablePage />;
   return (
     <main className="public-page pet-detail">
@@ -580,7 +592,17 @@ export function PetPage() {
           alt={`${pet.name} para adoção`}
           style={{ objectPosition: petObjectPosition(pet, "hero") }}
         />
-        <button className="icon-button gallery-share" aria-label="Compartilhar">
+        <button
+          className="icon-button gallery-share"
+          aria-label="Compartilhar"
+          onClick={() =>
+            share({
+              title: pet.name,
+              text: `${pet.name} procura um lar. Veja a ficha completa.`,
+              url: `${getPublicBaseUrl()}/pet/${pet.slug}`,
+            })
+          }
+        >
           <Share2 />
         </button>
         <span className="gallery-count">1 / 3</span>
@@ -683,6 +705,11 @@ export function PetPage() {
           Quero adotar
         </Link>
       </div>
+      {message && (
+        <div className="toast" role="status">
+          {message}
+        </div>
+      )}
     </main>
   );
 }

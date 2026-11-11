@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import {
   Archive,
   ArrowRight,
+  Camera,
   Check,
   CheckCircle2,
   ClipboardList,
@@ -29,6 +30,7 @@ import {
   ong,
   petObjectPosition,
   pets,
+  photos,
   requests,
   states,
   type PetFocalPoint,
@@ -54,6 +56,16 @@ import {
 } from "../components/ui";
 import { PetMiniLink, QrActions, QrCard } from "../components/PetParts";
 import { PhotoAdjuster, type PhotoAdjustment } from "../components/PhotoAdjuster";
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const petPublicPath = (name: string) => `/pet/${slugify(name)}-a1b2`;
 
 const WHATSAPP_MESSAGE_TEMPLATE =
   "Olá, {primeiro nome}! Aqui é da {nome da ONG}. Recebemos sua solicitação de adoção de {nome do pet} (protocolo {protocolo}) e queremos conversar sobre os próximos passos.";
@@ -376,8 +388,22 @@ export function PetsPage() {
                       <Link to={`/painel/animais/${p.id}`}>
                         <Edit3 /> Editar
                       </Link>
+                      <Link to={`/painel/animais/${p.id}/qr`}>
+                        <QrCode /> QR code
+                      </Link>
                       <button
-                        onClick={() => navigator.share?.({ title: p.name, url: `/pet/${p.slug}` })}
+                        onClick={async () => {
+                          const url = `${getPublicBaseUrl()}/pet/${p.slug}`;
+                          if (navigator.share) {
+                            try {
+                              await navigator.share({ title: p.name, url });
+                              return;
+                            } catch {
+                              /* usuário cancelou */
+                            }
+                          }
+                          await navigator.clipboard?.writeText(url);
+                        }}
                       >
                         <ExternalLink /> Compartilhar
                       </button>
@@ -486,7 +512,7 @@ export function PetFormPage() {
         className="form-stack"
         onSubmit={(e) => {
           e.preventDefault();
-          navigate("/painel/animais");
+          navigate(`/painel/animais/${id || pets[0].id}/qr`);
         }}
       >
         <SectionCard title="Informações básicas">
@@ -522,10 +548,19 @@ export function PetFormPage() {
               <Link2 />
               <span>
                 <small>URL pública estável</small>
-                <b>adotapet.app/pet/{name.toLowerCase().replace(/\s+/g, "-")}-a1b2</b>
+                <b>
+                  {getPublicBaseUrl()}
+                  {petPublicPath(name)}
+                </b>
                 <em>O link não muda depois de publicado.</em>
               </span>
-              <button type="button" aria-label="Copiar URL">
+              <button
+                type="button"
+                aria-label="Copiar URL"
+                onClick={() =>
+                  navigator.clipboard?.writeText(`${getPublicBaseUrl()}${petPublicPath(name)}`)
+                }
+              >
                 <Copy />
               </button>
             </div>
@@ -705,11 +740,39 @@ export function QrPage({ ongQr = false }: { ongQr?: boolean }) {
 
 export function OngSettingsPage() {
   const [desc, setDesc] = useState(ong.description);
+  const [coverOpen, setCoverOpen] = useState(false);
+  const [cover, setCover] = useState<PhotoAdjustment>({
+    src: photos.nina,
+    focalX: 50,
+    focalY: 30,
+    zoom: 1,
+  });
   return (
     <div className="dashboard-page form-page">
       <PageHeader title="Dados da ONG" eyebrow="Perfil público" />
       <form className="form-stack">
         <SectionCard title="Identidade">
+          <div className="ong-cover-field">
+            <span className="field-label">Capa do perfil público</span>
+            <div className="cover-preview">
+              <img
+                src={cover.src}
+                alt=""
+                style={{
+                  objectPosition: `${cover.focalX}% ${cover.focalY}%`,
+                  transform: `scale(${cover.zoom})`,
+                }}
+              />
+              <button
+                type="button"
+                className="cover-edit-button"
+                onClick={() => setCoverOpen(true)}
+              >
+                <Camera /> Alterar capa
+              </button>
+            </div>
+            <small>Aparece no topo da sua página pública. Formato 3 por 1.</small>
+          </div>
           <FileUpload circular />
           <div className="form-grid">
             <TextField label="Nome da instituição" defaultValue={ong.name} />
@@ -739,6 +802,17 @@ export function OngSettingsPage() {
           <Button>Salvar alterações</Button>
         </div>
       </form>
+      <PhotoAdjuster
+        open={coverOpen}
+        title="Ajustar capa"
+        aspect="3 / 1"
+        initial={cover.src}
+        onClose={() => setCoverOpen(false)}
+        onUse={(adjustment) => {
+          setCover(adjustment);
+          setCoverOpen(false);
+        }}
+      />
     </div>
   );
 }
