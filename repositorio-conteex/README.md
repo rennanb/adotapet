@@ -15,7 +15,7 @@ O AdotaPet é uma aplicação web em que a ONG entra no painel com um código de
 | `05 - Telas ou Vídeos` | Ficha pública do animal no celular e painel da ONG no computador. |
 | `06 - Código` | Indicação de onde está o código-fonte e o banco de dados. |
 | `07 - Banner` | Banner 90 x 120 cm em PDF (para impressão) e em PPTX (para edição). |
-| `08 - Edição Anterior (2026-1)` | Fluxograma, QR Code e telas do projeto Origem, preservados como histórico. |
+| `08 - Edição Anterior` | Fluxograma, QR Code e telas do projeto Origem, preservados como histórico. |
 
 ## Onde está o código
 
