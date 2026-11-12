@@ -274,7 +274,8 @@ export function LoginPage() {
           </Link>
           <AboutTag />
           <footer className="auth-footer">
-            Seus dados são protegidos pela LGPD · <a href="#">Privacidade</a> · v1.0
+            Seus dados são protegidos pela LGPD · <Link to="/privacidade">Privacidade</Link> ·{" "}
+            <Link to="/termos">Termos</Link>
           </footer>
         </div>
       </section>

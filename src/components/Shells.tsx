@@ -74,9 +74,7 @@ function AboutSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
         <button className="icon-button sheet-close" onClick={onClose} aria-label="Fechar">
           <X />
         </button>
-        <span className="project-seal">
-          Projeto interdisciplinar, Engenharia de Software, FAM, CONTEEX 2026
-        </span>
+        <span className="project-seal">Projeto interdisciplinar · FAM · CONTEEX 2026</span>
         <h2 id="about-title">Sobre o projeto</h2>
         <p>
           O AdotaPet aproxima ONGs e famílias usando uma coisa simples: uma plaquinha com QR Code e
@@ -113,18 +111,27 @@ function AboutSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
             <b>uma história mora aqui</b>
           </span>
         </div>
-        <p className="made-by">
+        <div className="made-by">
           <b>Turma do 2º semestre de Engenharia de Software, FAM</b>
-          <br />
-          Emerson, Luiz, Rennan, Raul, Gennik e Nicolas ·{" "}
+          <span className="made-by-names">Emerson, Luiz, Rennan, Raul, Gennik e Nicolas</span>
+        </div>
+        <div className="about-links">
           <a
-            href="https://github.com/rennanb/sistema_web_adocao_responsavel"
+            href="https://github.com/rennanb/adotapet"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Code2 size={15} /> Ver o código no GitHub
+            <Code2 size={16} /> Código no GitHub
           </a>
-        </p>
+          <span className="about-links-legal">
+            <Link to="/privacidade" onClick={onClose}>
+              Política de privacidade
+            </Link>
+            <Link to="/termos" onClick={onClose}>
+              Termos de uso
+            </Link>
+          </span>
+        </div>
         <Button onClick={onClose}>Entendi</Button>
       </div>
     </div>

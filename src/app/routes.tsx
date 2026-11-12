@@ -13,6 +13,7 @@ import {
   SuccessPage,
   UnavailablePage,
 } from "../pages/PublicPages";
+import { PrivacidadePage, TermosPage } from "../pages/LegalPages";
 import {
   ConfigPage,
   DashboardPage,
@@ -38,6 +39,8 @@ export const router = createBrowserRouter([
       { path: "pet/:slug", Component: PetPage },
       { path: "p/:slug", Component: PetPage },
       { path: "solicitacao/:token", Component: SolicitacaoPage },
+      { path: "privacidade", Component: PrivacidadePage },
+      { path: "termos", Component: TermosPage },
       { path: "pet/:slug/adotar", Component: AdoptPage },
       { path: "pet/:slug/adotar/enviado", Component: SuccessPage },
       {

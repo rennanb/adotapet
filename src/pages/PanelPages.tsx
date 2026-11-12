@@ -71,6 +71,7 @@ import {
   TextArea,
   TextField,
 } from "../components/ui";
+import { useAuth } from "../lib/auth";
 import { QrActions } from "../components/PetParts";
 import { PhotoAdjuster, type PhotoAdjustment } from "../components/PhotoAdjuster";
 
@@ -2158,8 +2159,15 @@ export function RequestDetailPage() {
 }
 
 export function ConfigPage() {
-  const [confirm, setConfirm] = useState("");
+  const [saindo, setSaindo] = useState(false);
   const { ong: minhaOng } = useOng();
+  const { sair } = useAuth();
+  const navigate = useNavigate();
+  const encerrar = async () => {
+    setSaindo(true);
+    await sair();
+    navigate("/entrar", { replace: true });
+  };
   return (
     <div className="dashboard-page form-page">
       <PageHeader title="Configurações" eyebrow="Conta e privacidade" />
@@ -2169,36 +2177,45 @@ export function ConfigPage() {
             <b>E-mail da conta</b>
             <p>{minhaOng?.email ?? "e-mail não informado"}</p>
           </div>
-          <Button variant="secondary">Trocar e-mail</Button>
+          <Button variant="secondary" onClick={() => navigate("/entrar")}>
+            Trocar e-mail
+          </Button>
         </div>
         <div className="setting-row">
           <div>
             <b>Sair deste dispositivo</b>
             <p>Você precisará de um novo código para entrar.</p>
           </div>
-          <Button variant="ghost">Sair</Button>
+          <Button variant="ghost" loading={saindo} onClick={encerrar}>
+            Sair
+          </Button>
         </div>
       </SectionCard>
       <SectionCard title="Privacidade">
         <div className="link-list">
-          <a href="#">
+          <Link to="/privacidade">
             Política de privacidade <ExternalLink />
-          </a>
-          <a href="#">
+          </Link>
+          <Link to="/termos">
             Termos de uso <ExternalLink />
-          </a>
+          </Link>
         </div>
       </SectionCard>
-      <SectionCard title="Excluir conta" className="danger-zone">
-        <p>Essa ação exclui a ONG, as fichas e solicitações. Não pode ser desfeita.</p>
-        <TextField
-          label='Digite "EXCLUIR" para confirmar'
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-        />
-        <Button variant="danger" disabled={confirm !== "EXCLUIR"}>
+      <SectionCard title="Excluir conta e dados" className="danger-zone">
+        <p>
+          A exclusão apaga a ONG, as fichas dos animais e as solicitações recebidas, e não pode ser
+          desfeita. Como o acesso é por código, a confirmação é feita por e-mail, para ninguém apagar
+          a conta sem querer.
+        </p>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            window.location.href =
+              "mailto:adotapet.projeto@gmail.com?subject=Exclus%C3%A3o%20de%20conta%20AdotaPet";
+          }}
+        >
           <Trash2 />
-          Excluir conta
+          Solicitar exclusão por e-mail
         </Button>
       </SectionCard>
       <p className="version">AdotaPet · versão 1.0.0</p>
