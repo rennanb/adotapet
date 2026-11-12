@@ -1,0 +1,56 @@
+ADOTAPET: DOCUMENTO DA SOLICITACAO
+=================================
+
+O que mudou
+-----------
+1. O e-mail da ONG ganhou o botao "Ver solicitacao completa".
+2. Esse link abre a solicitacao em formato de documento, com foto do pet,
+   dados de quem se candidatou, rotina da casa, mensagem e contato da ONG.
+3. A propria pagina tem o botao "Salvar em PDF", que usa a impressao do
+   navegador e sai no mesmo desenho da tela.
+4. O painel tambem ganhou o atalho "Ver documento da solicitacao", dentro
+   do detalhe de cada solicitacao.
+5. Todos os avisos (azuis, cinzas e de erro) ganharam respiro: nao ficam
+   mais encostados em textos, campos ou botoes em nenhuma tela.
+
+Arquivos
+--------
+src/lib/dados.tsx          leitura da solicitacao pelo link
+src/pages/PublicPages.tsx  pagina do documento
+src/pages/PanelPages.tsx   botao no detalhe da solicitacao
+src/app/routes.tsx         rota /solicitacao/:token
+src/index.css              estilo do documento e regra de impressao
+supabase/005_emails_brevo.sql        agora com o botao
+supabase/006_encerrar_solicitacoes.sql
+supabase/007_link_da_solicitacao.sql  link secreto e leitura publica
+
+Como aplicar
+------------
+1. Pare o servidor com Ctrl + C.
+2. Extraia este zip dentro da pasta do projeto, substituindo os arquivos.
+3. No Supabase, SQL Editor, New query: rode 005, 006 e 007, nesta ordem.
+   O 005 precisa ser rodado de novo para o e-mail passar a ter o botao.
+4. npm run dev.
+5. git add . ; git commit -m "documento da solicitacao e link no e-mail" ; git push
+
+Como testar
+-----------
+Abra uma solicitacao qualquer pelo formulario publico. O e-mail da ONG
+deve chegar com o botao laranja. Clique nele: abre a pagina do documento.
+Use "Salvar em PDF" e confira o arquivo gerado.
+
+No painel, entre em Solicitacoes, abra uma solicitacao e clique em
+"Ver documento da solicitacao". O link abre em outra aba.
+
+Detalhe importante
+------------------
+O link e secreto: e um codigo aleatorio, nao o numero do protocolo. Quem
+nao tem o codigo nao abre. Para trocar o codigo de uma solicitacao:
+
+   update public.solicitacoes
+      set token_publico = gen_random_uuid()
+    where protocolo = 'SOL-2026-0007';
+
+Para trocar o dominio usado nos e-mails:
+
+   alter database postgres set adotapet.site_url = 'https://seudominio.com';
