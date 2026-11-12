@@ -5,9 +5,9 @@ Plataforma web em que ONGs de proteção animal cadastram seus animais, divulgam
 Projeto interdisciplinar apresentado no 11º Congresso de Projetos Interdisciplinares do Centro Universitário Fam (CONTEEX), grupo 4301, 2º semestre de Engenharia de Software.
 
 **Site em produção:** https://adotapet-conteex.vercel.app
-**Material do evento (artigo, banner, diagramas e telas):** [conteex](conteex)
+**Material do evento (artigo, banner, diagramas e telas):** [repositorio-conteex](repositorio-conteex)
 
-<img src="conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/1.%20Ficha%20p%C3%BAblica%20do%20animal%20%28celular%29.png" width="230" alt="Ficha pública do animal no celular"> <img src="conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/2.%20Painel%20da%20ONG%20%28computador%29.png" width="430" alt="Painel da ONG no computador">
+<img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/1.%20Ficha%20p%C3%BAblica%20do%20animal%20%28celular%29.png" width="230" alt="Ficha pública do animal no celular"> <img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/2.%20Painel%20da%20ONG.png" width="430" alt="Painel da ONG no computador">
 
 ## O problema
 
