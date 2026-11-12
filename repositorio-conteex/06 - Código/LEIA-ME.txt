@@ -1,0 +1,16 @@
+CÓDIGO-FONTE DO PROJETO
+
+Para não duplicar arquivos, o código não foi copiado dentro desta pasta. Ele está na raiz deste mesmo repositório:
+
+  src/        aplicação web em TypeScript, React e Vite (telas, componentes, integração com o banco)
+  supabase/   schema do banco de dados, políticas de acesso, funções e disparo de e-mails
+  public/     ícone e arquivos estáticos
+
+Acesse rapidamente por: https://github.com/rennanb/adotapet/tree/main/src
+
+Aplicação em produção:
+  https://adotapet-conteex.vercel.app
+
+Banco de dados e autenticação: Supabase (PostgreSQL).
+Hospedagem do site: Vercel.
+Envio de e-mails: Brevo.
