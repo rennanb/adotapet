@@ -214,6 +214,7 @@ const nav = [
 
 export function DashboardShell() {
   const { open } = useAbout();
+  const [maisAberto, setMaisAberto] = useState(false);
   return (
     <div className="dashboard-shell">
       <aside className="sidebar">
@@ -260,7 +261,58 @@ export function DashboardShell() {
             </NavLink>
           );
         })}
+        <button
+          type="button"
+          className="bottom-nav-more"
+          aria-expanded={maisAberto}
+          aria-controls="mais-painel"
+          onClick={() => setMaisAberto(true)}
+        >
+          <Settings />
+          <span>Mais</span>
+        </button>
       </nav>
+      {maisAberto && (
+        <div
+          className="sheet-backdrop"
+          onMouseDown={(e) => e.target === e.currentTarget && setMaisAberto(false)}
+        >
+          <div className="sheet" role="dialog" aria-modal="true" aria-labelledby="mais-painel">
+            <span className="sheet-handle" />
+            <button
+              className="icon-button sheet-close"
+              onClick={() => setMaisAberto(false)}
+              aria-label="Fechar"
+            >
+              <X />
+            </button>
+            <h2 id="mais-painel">Mais</h2>
+            <div className="mobile-more-list">
+              <NavLink to="/painel/config" onClick={() => setMaisAberto(false)} className="more-item">
+                <Settings />
+                <span>
+                  <b>Configurações</b>
+                  <small>Dados da ONG, perfil público e conta</small>
+                </span>
+              </NavLink>
+              <button
+                type="button"
+                className="more-item"
+                onClick={() => {
+                  setMaisAberto(false);
+                  open();
+                }}
+              >
+                <Info />
+                <span>
+                  <b>Sobre o projeto</b>
+                  <small>Como o AdotaPet funciona e quem fez</small>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

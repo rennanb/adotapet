@@ -63,13 +63,33 @@ export function QrCard({
 
 type QrActionProps =
   | { context: "pet"; pet: Pet; url: string }
-  | { context: "ong"; ong: { name: string; slug: string }; url: string };
+  | {
+      context: "ong";
+      ong: {
+        name: string;
+        slug: string;
+        city?: string | null;
+        uf?: string | null;
+        about?: string | null;
+        logo?: string | null;
+        cover?: string | null;
+        pets?: number | null;
+      };
+      url: string;
+    };
 
 export function QrActions(props: QrActionProps) {
   const { url } = props;
   const pet = props.context === "pet" ? props.pet : null;
   const ongData = props.context === "ong" ? props.ong : null;
   const displayName = pet?.name || ongData!.name;
+  const ongLocal = [ongData?.city, ongData?.uf].filter(Boolean).join(" · ");
+  const ongResumo =
+    ongData && ongData.pets != null
+      ? `${ongData.pets} ${ongData.pets === 1 ? "pet disponível" : "pets disponíveis"}${
+          ongLocal ? ` · ${ongLocal}` : ""
+        }`
+      : ongLocal || "Conheça nossos pets disponíveis";
   const filePrefix = pet ? `adotapet-${pet.name.toLowerCase()}` : `adotapet-ong-${ongData!.slug}`;
   const qrRef = useRef<HTMLCanvasElement>(null);
   const svgRef = useRef<HTMLDivElement>(null);
@@ -150,14 +170,53 @@ export function QrActions(props: QrActionProps) {
       context.clip();
       drawCover(context, image, 56, photoY, logicalWidth - 112, photoHeight);
       context.restore();
+    } else if (ongData?.cover) {
+      const cover = new Image();
+      cover.crossOrigin = "anonymous";
+      cover.src = ongData.cover;
+      await cover.decode();
+      context.save();
+      context.beginPath();
+      context.roundRect(56, photoY, logicalWidth - 112, photoHeight, 30);
+      context.clip();
+      drawCover(context, cover, 56, photoY, logicalWidth - 112, photoHeight);
+      const degrad = context.createLinearGradient(0, photoY, 0, photoY + photoHeight);
+      degrad.addColorStop(0, "rgba(10, 12, 16, 0.05)");
+      degrad.addColorStop(1, "rgba(10, 12, 16, 0.55)");
+      context.fillStyle = degrad;
+      context.fillRect(56, photoY, logicalWidth - 112, photoHeight);
+      context.restore();
     } else {
-      context.fillStyle = "#fef3c7";
+      context.fillStyle = "#fdf1d6";
       context.beginPath();
       context.roundRect(56, photoY, logicalWidth - 112, photoHeight, 30);
       context.fill();
       context.fillStyle = "#f59e0b";
       context.font = "700 120px Poppins";
-      context.fillText("AP", 120, photoY + photoHeight / 2);
+      context.fillText("AdotaPet", 120, photoY + photoHeight / 2);
+    }
+
+    if (!pet && ongData) {
+      if (ongData.logo) {
+        const logo = new Image();
+        logo.crossOrigin = "anonymous";
+        logo.src = ongData.logo;
+        await logo.decode();
+        context.save();
+        context.beginPath();
+        context.arc(150, photoY + photoHeight - 96, 62, 0, Math.PI * 2);
+        context.closePath();
+        context.clip();
+        context.fillStyle = "#ffffff";
+        context.fillRect(88, photoY + photoHeight - 158, 124, 124);
+        context.drawImage(logo, 88, photoY + photoHeight - 158, 124, 124);
+        context.restore();
+        context.beginPath();
+        context.arc(150, photoY + photoHeight - 96, 62, 0, Math.PI * 2);
+        context.strokeStyle = "#ffffff";
+        context.lineWidth = 5;
+        context.stroke();
+      }
     }
     const contentY = photoY + photoHeight + 54;
     context.fillStyle = "#15181e";
@@ -165,7 +224,7 @@ export function QrActions(props: QrActionProps) {
     context.fillText(displayName, 64, contentY);
     context.font = "500 22px Inter";
     context.fillText(
-      pet ? `${pet.species} · ${pet.sex} · ${pet.size} · ${pet.age}` : "Conheça nossos pets",
+      pet ? `${pet.species} · ${pet.sex} · ${pet.size} · ${pet.age}` : ongResumo,
       64,
       contentY + 46,
     );
@@ -213,6 +272,60 @@ export function QrActions(props: QrActionProps) {
         context.fillText(chip, chipX + 15, textEnd + 41);
         chipX += chipWidth + 10;
       });
+    } else {
+      const sobre = (ongData?.about || "").trim();
+      context.fillStyle = "#15181e";
+      context.font = `600 ${format === "story" ? 26 : 20}px Inter`;
+      context.fillText(sobre ? "Sobre a ONG" : "Adote com responsabilidade", 64, contentY + 96);
+      context.fillStyle = "#3f3f46";
+      context.font = `400 ${format === "story" ? 25 : 19}px Inter`;
+      const fimTexto = drawWrappedText(
+        context,
+        sobre ||
+          "Somos uma ONG de proteção animal. Escaneie o QR para conhecer todos os pets disponíveis e iniciar uma adoção responsável.",
+        64,
+        contentY + 134,
+        650,
+        format === "story" ? 33 : 26,
+        format === "story" ? 4 : 3,
+      );
+      const chipsOng = [
+        ongData?.city || "Proteção animal",
+        ongData?.pets != null
+          ? `${ongData.pets} ${ongData.pets === 1 ? "pet" : "pets"}`
+          : "Adoção responsável",
+      ];
+      let chipX = 64;
+      chipsOng.forEach((chip) => {
+        context.font = "500 17px Inter";
+        const largura = context.measureText(chip).width + 30;
+        context.fillStyle = "#ffffff";
+        context.strokeStyle = "#e7e5df";
+        context.beginPath();
+        context.roundRect(chipX, fimTexto + 16, largura, 38, 9);
+        context.fill();
+        context.stroke();
+        context.fillStyle = "#3f3f46";
+        context.fillText(chip, chipX + 15, fimTexto + 41);
+        chipX += largura + 10;
+      });
+    }
+    if (format === "story") {
+      const ctaY = logicalHeight - 320;
+      context.fillStyle = "#fdf1d6";
+      context.beginPath();
+      context.roundRect(56, ctaY, logicalWidth - 112, 128, 24);
+      context.fill();
+      context.fillStyle = "#8a4a04";
+      context.font = "600 30px Inter";
+      context.fillText(
+        pet ? "Escaneie para ver a ficha e adotar" : "Escaneie para ver todos os pets",
+        96,
+        ctaY + 54,
+      );
+      context.fillStyle = "#6b7280";
+      context.font = "400 22px Inter";
+      context.fillText("Adoção responsável com acompanhamento da ONG", 96, ctaY + 92);
     }
     context.fillStyle = "#6b7280";
     context.font = "500 18px Inter";
@@ -262,29 +375,33 @@ export function QrActions(props: QrActionProps) {
   };
   return (
     <>
-      <article className="export-preview" aria-label="Prévia da peça de divulgação">
+      <article
+        className={`export-preview${pet ? "" : " ong-preview"}`}
+        aria-label="Prévia da peça de divulgação"
+      >
         {pet ? (
           <img src={pet.image} alt="" style={{ objectPosition: petObjectPosition(pet, "hero") }} />
         ) : (
-          <div className="ong-export-logo">AP</div>
+          <div className="ong-export-logo ong-preview-empty">
+            {ongData?.cover ? <img src={ongData.cover} alt="" /> : (
+              <>
+                <QrIcon />
+                <span>AdotaPet</span>
+              </>
+            )}
+            {ongData?.logo && <img className="ong-preview-avatar" src={ongData.logo} alt="" />}
+          </div>
         )}
         <div>
           <span>Prévia da exportação</span>
           <h3>{displayName}</h3>
-          <p>
-            {pet ? `${pet.species} · ${pet.sex} · ${pet.size} · ${pet.age}` : "Conheça nossos pets"}
-          </p>
-          <QRCodeSVG
-            value={url}
-            size={92}
-            includeMargin
-            level="M"
-            fgColor="#101010"
-            bgColor="#ffffff"
-          />
+          <p>{pet ? `${pet.species} · ${pet.sex} · ${pet.size} · ${pet.age}` : ongResumo}</p>
+
         </div>
       </article>
-      <div className="qr-raw-controls">
+      <details className="qr-more">
+        <summary>Mais opções do QR (PNG, SVG e tamanho)</summary>
+        <div className="qr-raw-controls">
         <label>
           <span>Tamanho do QR code</span>
           <select value={qrSize} onChange={(event) => setQrSize(Number(event.target.value))}>
@@ -310,11 +427,12 @@ export function QrActions(props: QrActionProps) {
           <Button variant="secondary" icon={<Download />} onClick={downloadQrSvg}>
             Baixar SVG
           </Button>
-          <Button variant="secondary" icon={<Printer />} onClick={printPoster}>
-            Imprimir cartaz
-          </Button>
+            <Button variant="secondary" icon={<Printer />} onClick={printPoster}>
+              Imprimir cartaz
+            </Button>
+          </div>
         </div>
-      </div>
+      </details>
       <div className="qr-actions">
         <Button icon={<Download />} onClick={printPoster}>
           {pet ? "Baixar cartaz (PDF)" : "Baixar cartaz da ONG"}
@@ -379,9 +497,13 @@ export function QrActions(props: QrActionProps) {
           </>
         ) : (
           <>
-            <div className="print-ong-logo">AP</div>
+            {ongData?.cover && <img src={ongData.cover} alt="" />}
+            <div className="print-ong-logo">
+              {ongData?.logo ? <img src={ongData.logo} alt="" /> : "AP"}
+            </div>
             <h1>{ongData!.name}</h1>
-            <p>Conheça nossos pets disponíveis para adoção.</p>
+            <p>{ongResumo}</p>
+            {ongData?.about && <p className="print-ong-about">{ongData.about}</p>}
           </>
         )}
         <QRCodeSVG value={url} size={220} includeMargin level="M" fgColor="#101010" />

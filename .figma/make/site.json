@@ -1,5 +1,5 @@
 {
-  "title": "Sistema Web de Adoção Responsável",
+  "title": "AdotaPet | Adoção responsável",
   "description": "Ajuda ONGs a divulgar animais para adoção com fichas públicas e QR codes, enquanto organiza solicitações e dados de candidatos em um só lugar.",
   "robots": {
     "index": false
@@ -7,5 +7,9 @@
   "accessibility": {
     "addBypassLinks": false,
     "ignoreReducedMotion": false
-  }
+  },
+  "icons": {
+    "icon": "/icone-adotapet.png"
+  },
+  "language": "pt-BR"
 }

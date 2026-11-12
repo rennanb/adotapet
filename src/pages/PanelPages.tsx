@@ -101,13 +101,14 @@ function buildWhatsAppUrl(phone: string, values: Record<string, string>) {
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
-const iniciais = (nome: string) =>
-  nome
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
+const PARTICULAS = new Set(["de", "da", "do", "das", "dos", "e"]);
+const iniciais = (nome: string) => {
+  const partes = nome.split(/\s+/).filter((parte) => parte && !PARTICULAS.has(parte.toLowerCase()));
+  const escolhidas = partes.length > 1 ? [partes[0], partes[partes.length - 1]] : partes;
+  return escolhidas
     .map((parte) => parte.charAt(0).toUpperCase())
     .join("");
+};
 
 const formatarDataHora = (iso: string | null) => {
   if (!iso) return "data não informada";
@@ -1147,9 +1148,7 @@ export function QrPage({ ongQr = false }: { ongQr?: boolean }) {
   const { ong: minhaOng, carregando: carregandoOng } = useOng();
   const [pet, setPet] = useState<PetDetalhado | null>(null);
   const [carregandoPet, setCarregandoPet] = useState(!ongQr);
-  const [linkCopiado, setLinkCopiado] = useState(false);
-  const ongQrRef = useRef<HTMLCanvasElement>(null);
-  const petQrRef = useRef<HTMLCanvasElement>(null);
+  const [totalPets, setTotalPets] = useState<number | null>(null);
 
   useEffect(() => {
     if (ongQr || !id) {
@@ -1169,49 +1168,25 @@ export function QrPage({ ongQr = false }: { ongQr?: boolean }) {
   }, [id, ongQr]);
 
   useEffect(() => {
-    if (!linkCopiado) return;
-    const timer = window.setTimeout(() => setLinkCopiado(false), 3000);
-    return () => window.clearTimeout(timer);
-  }, [linkCopiado]);
+    if (!ongQr || !minhaOng) return;
+    let ativo = true;
+    void listarPets(minhaOng.id).then((lista) => {
+      if (!ativo) return;
+      setTotalPets(lista.filter((item) => item.status === "disponível").length);
+    });
+    return () => {
+      ativo = false;
+    };
+  }, [ongQr, minhaOng]);
 
   const slugOng = minhaOng?.slug ?? "";
   const slugPet = pet ? pet.slug ?? pet.id : "";
   const urlOng = slugOng ? `${getPublicBaseUrl()}/ong/${slugOng}` : "";
   const urlPet = slugPet ? `${getPublicBaseUrl()}/p/${slugPet}` : "";
   const urlPublica = ongQr ? urlOng : urlPet;
-  const caminhoPublico = ongQr ? `/ong/${slugOng}` : `/p/${slugPet}`;
-  const nomeArquivo = ongQr ? `adotapet-ong-${slugOng}.png` : `adotapet-${slugPet}.png`;
   const nomeOng = minhaOng?.nome ?? "sua ONG";
   const nomePet = pet?.nome ?? "este pet";
   const fotoDoPet = pet?.foto_url ?? photos.caramelo;
-
-  const copiarLink = async () => {
-    if (!urlPublica) return;
-    await navigator.clipboard?.writeText(urlPublica);
-    setLinkCopiado(true);
-  };
-
-  const compartilhar = async () => {
-    if (!urlPublica) return;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: ongQr ? nomeOng : nomePet, url: urlPublica });
-        return;
-      } catch {
-        /* a pessoa cancelou o compartilhamento */
-      }
-    }
-    await copiarLink();
-  };
-
-  const baixarQr = () => {
-    const canvas = ongQr ? ongQrRef.current : petQrRef.current;
-    if (!canvas) return;
-    const ancora = document.createElement("a");
-    ancora.download = nomeArquivo;
-    ancora.href = canvas.toDataURL("image/png");
-    ancora.click();
-  };
 
   if (ongQr ? carregandoOng : carregandoPet) {
     return (
@@ -1266,7 +1241,7 @@ export function QrPage({ ongQr = false }: { ongQr?: boolean }) {
           /painel/animais para que o QR funcione.
         </p>
       )}
-      <div className="qr-layout">
+      <div className="qr-layout qr-layout-simple">
         <div>
           <TagCard className="qr-card">
             <span className="qr-label">
@@ -1315,90 +1290,39 @@ export function QrPage({ ongQr = false }: { ongQr?: boolean }) {
             <p>{ongQr ? "Conheça nossos pets disponíveis" : nomeOng}</p>
             <Badge tone="amber">Aponte a câmera</Badge>
           </TagCard>
-          <div className="qr-actions">
-            <Button icon={<Download />} onClick={baixarQr}>
-              {ongQr ? "Baixar QR da ONG" : "Baixar QR do pet"}
-            </Button>
-            <Button variant="secondary" icon={<Copy />} onClick={() => void copiarLink()}>
-              Copiar link
-            </Button>
-            <Link className="button button-secondary" to={caminhoPublico}>
-              <ExternalLink />
-              {ongQr ? "Abrir página da ONG" : "Abrir ficha pública"}
-            </Link>
-            <Button variant="secondary" icon={<Share2 />} onClick={() => void compartilhar()}>
-              Compartilhar
-            </Button>
-          </div>
           {ongQr ? (
-            <QrActions context="ong" ong={{ name: nomeOng, slug: slugOng }} url={urlOng} />
+            <QrActions
+              context="ong"
+              ong={{
+                name: nomeOng,
+                slug: slugOng,
+                city: minhaOng?.cidade ?? null,
+                uf: minhaOng?.uf ?? null,
+                about: minhaOng?.sobre ?? null,
+                logo: minhaOng?.logo_url ?? null,
+                cover: minhaOng?.capa_url ?? null,
+                pets: totalPets,
+              }}
+              url={urlOng}
+            />
           ) : pet ? (
             <QrActions context="pet" pet={petParaCard(pet)} url={urlPet} />
           ) : null}
-          {ongQr ? (
-            <QRCodeCanvas
-              ref={ongQrRef}
-              className="export-qr-source"
-              value={urlOng}
-              size={1024}
-              includeMargin
-              level="M"
-              bgColor="#ffffff"
-              fgColor="#101010"
-            />
-          ) : (
-            <QRCodeCanvas
-              ref={petQrRef}
-              className="export-qr-source"
-              value={urlPet}
-              size={1024}
-              includeMargin
-              level="M"
-              bgColor="#ffffff"
-              fgColor="#101010"
-            />
-          )}
         </div>
         <div className="qr-info">
-          <SectionCard title={ongQr ? "Compartilhe todos os seus pets" : "Como usar"}>
-            <ol className="number-list">
-              <li>
-                <span>1</span>
-                <p>
-                  <b>Escolha o formato ideal</b>
-                  <small>Cartaz A4, post quadrado ou story vertical.</small>
-                </p>
-              </li>
-              <li>
-                <span>2</span>
-                <p>
-                  <b>Confira a prévia</b>
-                  <small>A foto e o QR respeitam o layout do AdotaPet.</small>
-                </p>
-              </li>
-              <li>
-                <span>3</span>
-                <p>
-                  <b>Baixe e compartilhe</b>
-                  <small>
-                    {ongQr
-                      ? "Quem escanear vê todos os seus pets disponíveis."
-                      : "Coleira, cartaz da feira ou mural da clínica."}
-                  </small>
-                </p>
-              </li>
-            </ol>
+          <SectionCard title={ongQr ? "Onde usar o QR da ONG" : "Onde usar o QR do pet"}>
+            <p>
+              {ongQr
+                ? "Cole no mural da feira, na vitrine da clínica parceira ou no material de divulgação. Quem escanear vê todos os pets disponíveis."
+                : "Cole na coleira, no cartaz do evento ou no mural da clínica. Quem escanear abre a ficha e pode iniciar a adoção."}
+            </p>
+            <p className="field-hint">
+              Teste com a câmera do celular antes de imprimir. O link é público e não guarda dados de
+              quem visita.
+            </p>
           </SectionCard>
-          <p className="system-note">
-            <ShieldCheck />O QR aponta para um link público estável. Ele não guarda dados pessoais.
-          </p>
         </div>
       </div>
-      {linkCopiado && (
-        <div className="toast" role="status">
-          <span>Link copiado</span>
-        </div>
-      )}
     </div>
   );
 }
@@ -2091,6 +2015,14 @@ export function RequestDetailPage() {
               >
                 Recusar
               </Button>
+              <a
+                className="button button-secondary request-doc-link"
+                href={linkDaSolicitacao(solicitacao.token_publico)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <ExternalLink /> Ver documento da solicitação
+              </a>
             </div>
             {aviso && (
               <p className={aviso.tipo === "erro" ? "form-alert" : "system-note"} aria-live="polite">
@@ -2098,14 +2030,6 @@ export function RequestDetailPage() {
                 {aviso.texto}
               </p>
             )}
-            <a
-              className="button button-secondary request-doc-link"
-              href={linkDaSolicitacao(solicitacao.token_publico)}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <ExternalLink /> Ver documento da solicitação
-            </a>
             <p className="field-hint">
               Ao concluir, os pets desta solicitação passam para adotado. O contato com a pessoa
               continua sendo por e-mail e WhatsApp.
