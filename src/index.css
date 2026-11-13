@@ -7523,3 +7523,100 @@ body {
     margin-top: 14px;
   }
 }
+
+/* Filtro das fotos: respiro nos botões e prévia */
+.filter-options {
+  gap: 8px;
+  margin-top: 14px;
+}
+.filter-option {
+  padding: 10px 22px;
+}
+.filter-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+}
+.filter-preview-image {
+  position: relative;
+  flex: 0 0 auto;
+  width: 148px;
+  height: 96px;
+  overflow: hidden;
+  background: #f1f2f4;
+  border-radius: 12px;
+}
+.filter-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.filter-preview small {
+  max-width: 340px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+/* Cabeçalhos do painel com o mesmo ritmo */
+.pet-list-header {
+  margin-bottom: 30px;
+}
+.pets-page .filter-bar,
+.request-filters {
+  margin-bottom: 26px;
+}
+
+/* Cartaz da ONG: logo pequena sobre a imagem */
+@media print {
+  .print-poster .print-ong-logo {
+    position: absolute;
+    top: 110mm;
+    left: 24mm;
+    display: grid;
+    place-items: center;
+    width: 26mm;
+    height: 26mm;
+    overflow: hidden;
+    color: #92400e;
+    background: #fffdf7;
+    border: 1.2mm solid #fffdf7;
+    border-radius: 50%;
+    font: 700 11pt Poppins, sans-serif;
+  }
+  .print-poster .print-ong-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+@media print {
+  .print-poster > h1,
+  .print-poster > p {
+    grid-column: 1 / -1;
+  }
+}
+
+@media print {
+  .print-poster {
+    align-content: space-between;
+  }
+  .print-poster > p {
+    margin: 0;
+  }
+  .print-ong-about {
+    margin-top: 2mm !important;
+  }
+}
+
+@media print {
+  .print-ong-info {
+    grid-column: 1 / -1;
+  }
+  .print-ong-info p {
+    margin: 2mm 0 0;
+  }
+}

@@ -1495,6 +1495,20 @@ export function OngSettingsPage() {
               </button>
             ))}
           </div>
+          <div className="filter-preview">
+            <div
+              className="filter-preview-image duotone"
+              style={{ "--duo": String(filtro / 100) } as React.CSSProperties}
+            >
+              {minhaOng.capa_url || minhaOng.logo_url ? (
+                <img src={(minhaOng.capa_url ?? minhaOng.logo_url) || ""} alt="" />
+              ) : null}
+            </div>
+            <small>
+              Prévia com o filtro selecionado. A foto original nunca é alterada, o tom aparece apenas
+              na ficha pública.
+            </small>
+          </div>
         </SectionCard>
         <SectionCard title="Identidade">
           <div className="ong-cover-field">

@@ -513,9 +513,11 @@ export function QrActions(props: QrActionProps) {
             <div className="print-ong-logo">
               {ongData?.logo ? <img src={ongData.logo} alt="" /> : "AP"}
             </div>
-            <h1>{ongData!.name}</h1>
-            <p>{ongResumo}</p>
-            {ongData?.about && <p className="print-ong-about">{ongData.about}</p>}
+            <div className="print-ong-info">
+              <h1>{ongData!.name}</h1>
+              <p>{ongResumo}</p>
+              {ongData?.about && <p className="print-ong-about">{ongData.about}</p>}
+            </div>
           </>
         )}
         <div className="print-qr">
