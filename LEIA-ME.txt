@@ -1,0 +1,13 @@
+Pacote de atualização do AdotaPet
+=================================
+
+1. Extraia o conteúdo desta pasta dentro de C:\Users\qualidade01\dev\adotapet
+   (vai substituir as pastas src e public).
+2. No Supabase, rode os dois SQLs desta pasta, nesta ordem:
+   - 010_denuncias.sql    (tabela de denúncias)
+   - 011_filtro_fotos.sql (opção de filtro por ONG)
+   O 010 você já rodou, então pode pular. O 011 é novo.
+3. No terminal, dentro do projeto: npm run dev
+4. Teste: abra uma ficha, clique em "Denunciar esta ficha", envie e confira
+   a tabela denuncias no Supabase. Depois vá em Dados da ONG e troque o
+   filtro das fotos para ver a diferença na ficha.

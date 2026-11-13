@@ -47,6 +47,7 @@ import {
   TextField,
 } from "../components/ui";
 import { PetCard } from "../components/PetParts";
+import { ReportButton } from "../components/Report";
 
 export function LandingRedirect() {
   const navigate = useNavigate();
@@ -858,6 +859,10 @@ export function OngPage() {
             </p>
           </div>
         )}
+        <div className="report-row">
+          <span>Encontrou algo errado neste perfil?</span>
+          <ReportButton tipo="ong" nome={ongPublica.nome} slug={ongPublica.slug} />
+        </div>
       </div>
       {message && (
         <div className="toast" role="status">
@@ -938,6 +943,7 @@ export function PetPage() {
       <PublicTopbar overlay />
       <section
         className="pet-gallery duotone"
+        style={{ "--duo": String((ongPublica.filtroFotos ?? 10) / 100) } as React.CSSProperties}
         aria-roledescription="carrossel"
         aria-label={`Fotos de ${pet.name}`}
         onKeyDown={(evento) => {
@@ -1103,6 +1109,10 @@ export function PetPage() {
               <li>A adoção não envolve pagamento pelo animal.</li>
             </ul>
           </section>
+          <div className="report-row">
+            <span>Encontrou algo errado nesta ficha?</span>
+            <ReportButton tipo="pet" nome={pet.nome} slug={pet.slug} ongSlug={ongPublica.slug} />
+          </div>
         </div>
       </div>
       <div className="sticky-cta">

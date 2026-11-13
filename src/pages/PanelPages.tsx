@@ -1043,7 +1043,14 @@ export function PetFormPage() {
               <div className="photo-strip" role="list" aria-label="Fotos enviadas">
                 {fotos.map((url, indice) => (
                   <div className="photo-strip-item" role="listitem" key={url}>
-                    <img src={url} alt={`Foto ${indice + 1} do pet`} />
+                    <img
+                      src={url}
+                      alt={`Foto ${indice + 1} do pet`}
+                      style={{
+                        objectPosition:
+                          focal === "top" ? "50% 20%" : focal === "center" ? "50% 50%" : "50% 30%",
+                      }}
+                    />
                     <div className="photo-strip-actions">
                       {indice === 0 ? (
                         <Badge tone="amber">Capa</Badge>
@@ -1340,6 +1347,7 @@ export function OngSettingsPage() {
   const [siteInstagram, setSiteInstagram] = useState("");
   const [endereco, setEndereco] = useState("");
   const [sobre, setSobre] = useState("");
+  const [filtro, setFiltro] = useState(10);
 
   const [salvando, setSalvando] = useState(false);
   const [enviandoLogo, setEnviandoLogo] = useState(false);
@@ -1357,6 +1365,7 @@ export function OngSettingsPage() {
     setSiteInstagram(minhaOng.site_instagram ?? "");
     setEndereco(minhaOng.endereco ?? "");
     setSobre(minhaOng.sobre ?? "");
+    setFiltro(minhaOng.filtro_fotos ?? 10);
   }, [minhaOng]);
 
   useEffect(() => {
@@ -1419,6 +1428,7 @@ export function OngSettingsPage() {
       site_instagram: siteInstagram.trim() || null,
       endereco: endereco.trim() || null,
       sobre: sobre.trim() || null,
+      filtro_fotos: filtro,
     });
     setSalvando(false);
     setAviso(
@@ -1455,6 +1465,28 @@ export function OngSettingsPage() {
     <div className="dashboard-page form-page">
       <PageHeader title="Dados da ONG" eyebrow="Perfil público" />
       <form className="form-stack" onSubmit={enviarFormulario}>
+        <SectionCard title="Fotos dos animais">
+          <p className="field-help">
+            O filtro deixa as fotos com um tom quente e uniforme entre os animais. Ele aparece na
+            ficha pública e não altera o arquivo original enviado.
+          </p>
+          <div className="filter-options">
+            {[
+              [0, "Sem filtro"],
+              [10, "Suave"],
+              [30, "Médio"],
+            ].map(([valor, rotulo]) => (
+              <button
+                key={String(valor)}
+                type="button"
+                className={filtro === valor ? "filter-option is-active" : "filter-option"}
+                onClick={() => setFiltro(Number(valor))}
+              >
+                {rotulo}
+              </button>
+            ))}
+          </div>
+        </SectionCard>
         <SectionCard title="Identidade">
           <div className="ong-cover-field">
             <span className="field-label">Capa do perfil público</span>

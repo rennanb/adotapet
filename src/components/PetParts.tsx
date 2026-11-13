@@ -227,7 +227,7 @@ export function QrActions(props: QrActionProps) {
         context.stroke();
       }
     }
-    const contentY = photoY + photoHeight + 54;
+    const contentY = photoY + photoHeight + (format === "story" ? 108 : 82);
     context.fillStyle = "#15181e";
     context.font = "700 48px Poppins";
     context.fillText(displayName, 64, contentY);
@@ -238,7 +238,7 @@ export function QrActions(props: QrActionProps) {
       contentY + 46,
     );
     const qr = qrRef.current;
-    if (qr) context.drawImage(qr, logicalWidth - 274, contentY - 38, 210, 210);
+    if (qr) context.drawImage(qr, logicalWidth - 274, contentY - 46, 210, 210);
     if (pet) {
       const description = pet.description || "";
       context.fillStyle = "#15181e";
@@ -265,8 +265,7 @@ export function QrActions(props: QrActionProps) {
             format === "story" ? 38 : 30,
             2,
           );
-      const chips =
-        format === "story" ? ["Brincalhão", "Sociável", "Castrado"] : ["Brincalhão", "Castrado"];
+      const chips = (pet.temperament ?? []).slice(0, format === "story" ? 3 : 2);
       let chipX = 64;
       chips.forEach((chip) => {
         context.font = "500 17px Inter";
@@ -318,23 +317,6 @@ export function QrActions(props: QrActionProps) {
         context.fillText(chip, chipX + 15, fimTexto + 41);
         chipX += largura + 10;
       });
-    }
-    if (format === "story") {
-      const ctaY = logicalHeight - 320;
-      context.fillStyle = "#fdf1d6";
-      context.beginPath();
-      context.roundRect(56, ctaY, logicalWidth - 112, 128, 24);
-      context.fill();
-      context.fillStyle = "#8a4a04";
-      context.font = "600 30px Inter";
-      context.fillText(
-        pet ? "Escaneie para ver a ficha e adotar" : "Escaneie para ver todos os pets",
-        96,
-        ctaY + 54,
-      );
-      context.fillStyle = "#6b7280";
-      context.font = "400 22px Inter";
-      context.fillText("Adoção responsável com acompanhamento da ONG", 96, ctaY + 92);
     }
     context.fillStyle = "#6b7280";
     context.font = "500 18px Inter";

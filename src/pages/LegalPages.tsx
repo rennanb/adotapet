@@ -206,6 +206,18 @@ export function TermosPage() {
         <li>tentar acessar dados de outra ONG, automatizar envios em massa ou explorar falhas;</li>
         <li>usar o conteúdo do site para golpes, spam ou cobrança de taxa de adoção.</li>
       </ul>
+      <h2>Denúncias</h2>
+      <p>
+        A ficha de cada animal e o perfil de cada ONG têm um botão de denúncia, que abre um e-mail
+        para a equipe do projeto já com o assunto e o link da página. Também dá para escrever direto
+        para {CONTATO}.
+      </p>
+      <p>
+        Toda denúncia é lida. Conforme a gravidade, pode gerar pedido de esclarecimento à ONG,
+        ocultação temporária do conteúdo, suspensão da conta ou comunicação às autoridades. Denúncia
+        feita de má-fé, com informação sabidamente falsa, também está sujeita às medidas destes
+        termos.
+      </p>
       <h2>Descumprimento e punições</h2>
       <p>
         Quem descumprir estes termos está sujeito a medidas aplicadas conforme a gravidade e a

@@ -15,6 +15,7 @@ import {
 } from "../pages/PublicPages";
 import { PrivacidadePage, TermosPage } from "../pages/LegalPages";
 import { OngsPublicPage, PetsPublicPage } from "../pages/ExplorePages";
+import { HomePage } from "../pages/HomePage";
 import {
   ConfigPage,
   DashboardPage,
@@ -31,7 +32,7 @@ export const router = createBrowserRouter([
     Component: RootShell,
     ErrorBoundary: RouteErrorPage,
     children: [
-      { index: true, Component: LandingRedirect },
+      { index: true, Component: HomePage },
       { path: "entrar", Component: LoginPage },
       { path: "entrar/codigo", Component: CodePage },
       { path: "cadastro", Component: SignupPage },

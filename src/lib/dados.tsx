@@ -26,6 +26,7 @@ export type Ong = {
   logo_url: string | null;
   capa_url: string | null;
   status: "pendente" | "ativa" | "suspensa";
+  filtro_fotos: number | null;
 };
 
 type ValorOng = {
@@ -43,7 +44,7 @@ const ContextoOng = createContext<ValorOng>({
 });
 
 const COLUNAS =
-  "id, slug, nome, email, whatsapp, cidade, uf, sobre, site_instagram, endereco, logo_url, capa_url, status";
+  "id, slug, nome, email, whatsapp, cidade, uf, sobre, site_instagram, endereco, logo_url, capa_url, status, filtro_fotos";
 
 export function OngProvider({ children }: { children: ReactNode }) {
   const { sessao } = useAuth();
@@ -676,9 +677,11 @@ export type OngPublica = {
   email: string;
   logo: string | null;
   capa: string | null;
+  filtroFotos: number;
 };
 
-const COLUNAS_ONG_PUBLICA = "nome, slug, cidade, uf, sobre, whatsapp, email, logo_url, capa_url";
+const COLUNAS_ONG_PUBLICA =
+  "nome, slug, cidade, uf, sobre, whatsapp, email, logo_url, capa_url, filtro_fotos";
 
 type LinhaOngPublica = {
   nome: string;
@@ -690,6 +693,7 @@ type LinhaOngPublica = {
   email: string;
   logo_url: string | null;
   capa_url: string | null;
+  filtro_fotos: number | null;
 };
 
 function montarOngPublica(linha: LinhaOngPublica): OngPublica {
@@ -703,6 +707,7 @@ function montarOngPublica(linha: LinhaOngPublica): OngPublica {
     email: linha.email,
     logo: linha.logo_url,
     capa: linha.capa_url,
+    filtroFotos: linha.filtro_fotos ?? 10,
   };
 }
 
