@@ -314,18 +314,19 @@ export function PetsPublicPage() {
         />
 
         <div className="explore-cta">
-          <div>
-            <h3>Sua ONG ainda não está no AdotaPet?</h3>
-            <p>Crie a conta, cadastre os animais e divulgue cada um com um QR Code.</p>
-          </div>
-          <div className="explore-cta-actions">
+          <div className="explore-cta-main">
+            <div>
+              <h3>Sua ONG ainda não está no AdotaPet?</h3>
+              <p>Crie a conta, cadastre os animais e divulgue cada um com QR Code, link ou post pronto.</p>
+            </div>
             <Link className="button button-primary" to="/cadastro">
               Cadastrar minha ONG
               <ArrowRight size={18} />
             </Link>
-            <Link className="explore-cta-login" to="/entrar">
-              Já tem conta? Entrar
-            </Link>
+          </div>
+          <div className="explore-cta-foot">
+            <span>Já tem uma conta de ONG?</span>
+            <Link to="/entrar">Entrar no painel</Link>
           </div>
         </div>
       </div>
@@ -469,35 +470,40 @@ export function OngsPublicPage() {
           passos={[
             {
               titulo: "Crie a conta",
-              texto: "Entrada por código de seis dígitos no e-mail, sem senha para guardar.",
+              texto: "Você entra com o e-mail da ONG e um código que chega na hora. Sem senha para decorar.",
             },
             {
               titulo: "Cadastre os animais",
-              texto: "Até cinco fotos, dados de saúde, temperamento e status de cada pet.",
+              texto: "Até cinco fotos, dados de saúde, temperamento e a situação de cada um, com espaço para contar a história.",
             },
             {
-              titulo: "Divulgue e receba",
-              texto: "QR Code do pet e da ONG, com as solicitações organizadas por protocolo no painel.",
+              titulo: "Divulgue o animal",
+              texto: "QR Code para o cartaz, link para enviar no WhatsApp e modelos de post prontos para o Instagram.",
+            },
+            {
+              titulo: "Acompanhe as solicitações",
+              texto: "Os pedidos chegam com protocolo e ficam organizados no painel, com o contato de quem se candidatou.",
             },
           ]}
         />
 
         <div className="explore-cta">
-          <div>
-            <h3>Quer ver a sua ONG nesta lista?</h3>
-            <p>
-              O cadastro é gratuito. Você cadastra os animais, gera os QR Codes e recebe as
-              solicitações com protocolo.
-            </p>
-          </div>
-          <div className="explore-cta-actions">
+          <div className="explore-cta-main">
+            <div>
+              <h3>Quer ver a sua ONG nesta lista?</h3>
+              <p>
+                O cadastro é gratuito. Você cadastra os animais, divulga com QR Code, link ou post
+                pronto e recebe as solicitações com protocolo.
+              </p>
+            </div>
             <Link className="button button-primary" to="/cadastro">
               Criar conta da ONG
               <ArrowRight size={18} />
             </Link>
-            <Link className="explore-cta-login" to="/entrar">
-              Já tem conta? Entrar
-            </Link>
+          </div>
+          <div className="explore-cta-foot">
+            <span>Já tem uma conta de ONG?</span>
+            <Link to="/entrar">Entrar no painel</Link>
           </div>
         </div>
       </div>

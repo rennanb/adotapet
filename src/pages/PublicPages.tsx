@@ -29,7 +29,7 @@ import {
   Share2,
 } from "lucide-react";
 import { getPublicBaseUrl, petObjectPosition, photos, states, type Pet } from "../mocks";
-import { AboutTag, PublicTopbar } from "../components/Shells";
+import { PublicTopbar, useAbout } from "../components/Shells";
 import {
   BackLink,
   Badge,
@@ -71,8 +71,8 @@ const authSlides = [
     position: "50% 40%",
   },
   {
-    title: "Um QR code conta a história dele.",
-    pill: "Quem encontra o animal escaneia e vê o perfil",
+    title: "Um link conta a história dele.",
+    pill: "QR code no cartaz, link no WhatsApp e no Instagram",
     image:
       "https://images.unsplash.com/photo-1667716705760-233650f8f3fe?auto=format&fit=crop&w=1400&q=85",
     position: "50% 36%",
@@ -209,6 +209,7 @@ function AuthCarousel() {
 }
 
 export function LoginPage() {
+  const { open: openAbout } = useAbout();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -272,11 +273,25 @@ export function LoginPage() {
           <Link className="text-link" to="/cadastro">
             Ainda não tem conta? <b>Crie a da sua ONG</b>
           </Link>
-          <p className="auth-explore">
-            Quer adotar? Veja os <Link to="/pets">pets disponíveis</Link> e conheça as{" "}
-            <Link to="/ongs">ONGs parceiras</Link>.
-          </p>
-          <AboutTag />
+          <div className="auth-invite">
+            <div>
+              <span className="auth-invite-label">Para quem quer adotar</span>
+              <b>Veja os pets disponíveis e as ONGs parceiras</b>
+              <p>
+                Abra a ficha de um animal, conheça a ONG responsável e envie a solicitação de adoção
+                pelo próprio site.
+              </p>
+            </div>
+            <div className="auth-invite-actions">
+              <Link className="auth-invite-main" to="/pets">
+                Ver pets disponíveis
+                <ArrowRight size={16} />
+              </Link>
+              <button type="button" className="auth-invite-about" onClick={openAbout}>
+                Sobre o projeto
+              </button>
+            </div>
+          </div>
           <footer className="auth-footer">
             Seus dados são protegidos pela LGPD · <Link to="/privacidade">Privacidade</Link> ·{" "}
             <Link to="/termos">Termos</Link>
@@ -1076,6 +1091,18 @@ export function PetPage() {
               </div>
             </>
           )}
+          <section className="adoption-process">
+            <h2>Como funciona a adoção</h2>
+            <ul>
+              <li>A ONG analisa cada pedido e responde pelo e-mail que você informar.</li>
+              <li>
+                Ela pode pedir documentos ou fotos do espaço, marcar uma conversa e agendar uma
+                visita antes de aprovar.
+              </li>
+              <li>Cada ONG conduz o processo do seu jeito, com critérios e prazos próprios.</li>
+              <li>A adoção não envolve pagamento pelo animal.</li>
+            </ul>
+          </section>
         </div>
       </div>
       <div className="sticky-cta">
@@ -1325,8 +1352,10 @@ export function AdoptPage() {
           <>
             <p className="system-note adoption-note">
               <Info />
-              Sua solicitação vai direto para a ONG responsável pelo pet. Ela analisa e entra em
-              contato pelo e-mail e pelo WhatsApp que você informar.
+              Sua solicitação vai direto para a ONG responsável pelo pet, que analisa o pedido e
+              entra em contato pelo e-mail e pelo WhatsApp informados. Ela pode pedir documentos ou
+              fotos do espaço e agendar uma visita. Cada ONG tem o próprio processo, e a adoção não
+              envolve pagamento pelo animal.
             </p>
             <div className="form-grid">
               <TextField
@@ -1550,6 +1579,13 @@ export function AdoptPage() {
               onChange={(e) => setMensagem(e.target.value)}
               placeholder="Conte por que você quer adotar..."
             />
+            <p className="system-note adoption-note">
+              <Info />
+              Ao enviar, a ONG recebe seus dados e conduz a análise: pode pedir comprovação das
+              informações, marcar entrevista ou visita e recusar o pedido. A adoção não deve
+              envolver pagamento pelo animal. Se alguém pedir qualquer valor, não pague e avise a
+              ONG por este mesmo contato.
+            </p>
             <CheckField checked={consent} onChange={() => setConsent(!consent)}>
               Autorizo o uso dos meus dados para este processo, conforme a{" "}
               <a href="#">política de privacidade</a>.
@@ -1679,15 +1715,26 @@ export function SuccessPage() {
         <SectionCard title="O que acontece agora?">
           <ol className="next-steps">
             <li>
-              <span>1</span>A ONG recebe sua solicitação por e-mail.
+              <span>1</span>A ONG recebe sua solicitação por e-mail, com o protocolo.
             </li>
             <li>
-              <span>2</span>A ONG analisa e entra em contato pelo e-mail informado.
+              <span>2</span>
+              Ela analisa o pedido e pode pedir documentos ou fotos do espaço, marcar uma conversa
+              ou agendar uma visita.
             </li>
             <li>
-              <span>3</span>A adoção segue com a ONG, que combina a entrega do animal.
+              <span>3</span>
+              Cada ONG conduz o processo do seu jeito, com critérios e prazos próprios, até a
+              entrega do animal.
+            </li>
+            <li>
+              <span>4</span>A adoção não envolve pagamento pelo animal.
             </li>
           </ol>
+          <p className="adoption-alert">
+            Se alguém pedir qualquer valor em nome da ONG ou do AdotaPet, não pague. Guarde a
+            conversa e avise a ONG pelo contato oficial.
+          </p>
         </SectionCard>
         <p className="success-contact">
           {petsEnviados.length > 0

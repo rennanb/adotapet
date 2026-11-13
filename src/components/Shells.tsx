@@ -378,22 +378,32 @@ export function PublicFooter() {
           <Brand />
           <p>
             Projeto interdisciplinar do 2º semestre de Engenharia de Software da FAM, apresentado no
-            CONTEEX 2026. ONGs cadastram os animais, divulgam por QR Code e recebem as solicitações
-            de adoção com protocolo.
+            CONTEEX 2026. A ONG cadastra os animais, divulga com QR Code, link ou post pronto e
+            recebe as solicitações de adoção com protocolo.
           </p>
         </div>
-        <nav className="public-footer-links" aria-label="Links do projeto">
-          <Link to="/pets">Pets para adoção</Link>
-          <Link to="/ongs">ONGs</Link>
-          <button type="button" onClick={open}>
-            Sobre o projeto
-          </button>
-          <Link to="/entrar">Entrar</Link>
-          <Link to="/privacidade">Privacidade</Link>
-          <Link to="/termos">Termos de uso</Link>
-          <a href="https://github.com/rennanb/adotapet" target="_blank" rel="noopener noreferrer">
-            Código no GitHub
-          </a>
+        <nav className="public-footer-nav" aria-label="Links do projeto">
+          <div className="public-footer-col">
+            <span className="public-footer-label">Explorar</span>
+            <Link to="/pets">Pets para adoção</Link>
+            <Link to="/ongs">ONGs</Link>
+          </div>
+          <div className="public-footer-col">
+            <span className="public-footer-label">Para ONGs</span>
+            <Link to="/entrar">Entrar</Link>
+            <Link to="/cadastro">Criar conta</Link>
+          </div>
+          <div className="public-footer-col">
+            <span className="public-footer-label">Projeto</span>
+            <button type="button" onClick={open}>
+              Sobre o projeto
+            </button>
+            <Link to="/privacidade">Privacidade</Link>
+            <Link to="/termos">Termos de uso</Link>
+            <a href="https://github.com/rennanb/adotapet" target="_blank" rel="noopener noreferrer">
+              Código no GitHub
+            </a>
+          </div>
         </nav>
       </div>
       <p className="public-footer-note">

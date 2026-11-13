@@ -172,8 +172,24 @@ export function TermosPage() {
         será aprovada e não é parte do acordo firmado entre as partes.
       </p>
       <p>
+        A ONG pode pedir documentos e comprovação das informações, marcar entrevista, solicitar fotos
+        do espaço e agendar visita técnica antes de aprovar. Cada ONG define o próprio processo, os
+        critérios e o prazo, e a plataforma não interfere nessa etapa.
+      </p>
+      <p>
         A ONG pode aceitar ou recusar uma solicitação. Quando houver recusa, o sistema envia um
         e-mail automático para quem se candidatou.
+      </p>
+      <h2>Adoção sem cobrança</h2>
+      <p>
+        A adoção não deve envolver pagamento pelo animal. Cobrar por adoção, em nome da ONG ou do
+        AdotaPet, é proibido nestes termos. Se alguém pedir qualquer valor, não pague, guarde a
+        conversa e avise a ONG pelo contato oficial.
+      </p>
+      <p>
+        Doações espontâneas para custear ração, castração e tratamento são bem-vindas quando
+        combinadas direto com a ONG, sempre sem obrigação e sem qualquer relação com a aprovação de
+        uma adoção.
       </p>
 
       <h2>Uso permitido</h2>
@@ -190,6 +206,42 @@ export function TermosPage() {
         <li>tentar acessar dados de outra ONG, automatizar envios em massa ou explorar falhas;</li>
         <li>usar o conteúdo do site para golpes, spam ou cobrança de taxa de adoção.</li>
       </ul>
+      <h2>Descumprimento e punições</h2>
+      <p>
+        Quem descumprir estes termos está sujeito a medidas aplicadas conforme a gravidade e a
+        reincidência, sempre com registro interno:
+      </p>
+      <ul>
+        <li>advertência com pedido de correção em até 48 horas;</li>
+        <li>remoção do conteúdo irregular, como ficha, foto ou anúncio;</li>
+        <li>suspensão temporária do acesso, com bloqueio de novas solicitações;</li>
+        <li>encerramento definitivo da conta e bloqueio de novo cadastro com os mesmos dados;</li>
+        <li>
+          comunicação às autoridades quando houver indício de crime, como maus-tratos (Lei
+          9.605/1998), estelionato (Código Penal, art. 171) ou venda de animais;
+        </li>
+        <li>medidas judiciais cabíveis para reparar prejuízos causados à plataforma ou a terceiros.</li>
+      </ul>
+      <p>
+        Em situações de risco ao animal ou a pessoas, a suspensão pode ser imediata, sem aviso
+        prévio, com comunicação posterior e direito de defesa pelo e-mail de contato.
+      </p>
+      <h2>Limitação de responsabilidade</h2>
+      <p>
+        O AdotaPet é uma plataforma acadêmica de divulgação e contato. Não é abrigo, não é tutor, não
+        recebe animais e não verifica previamente as informações publicadas pelas ONGs.
+      </p>
+      <ul>
+        <li>a veracidade das fichas, fotos e status é responsabilidade da ONG;</li>
+        <li>a decisão de adotar ou de entregar o animal é exclusiva da ONG e de quem adota;</li>
+        <li>não respondemos pelo comportamento, pela saúde ou pela adaptação do animal;</li>
+        <li>não respondemos por acordos, pagamentos ou desentendimentos entre as partes;</li>
+        <li>não garantimos disponibilidade contínua, resultado de adoção nem prazo de resposta.</li>
+      </ul>
+      <p>
+        Na máxima extensão permitida pela lei, a responsabilidade da plataforma se limita aos danos
+        diretos comprovadamente causados por falha própria na prestação do serviço.
+      </p>
 
       <h2>Conteúdo e propriedade intelectual</h2>
       <p>
@@ -207,7 +259,8 @@ export function TermosPage() {
       <h2>Encerramento de conta</h2>
       <p>
         A ONG pode pedir o encerramento a qualquer momento pelo e-mail {CONTATO}. Podemos suspender
-        contas que violem estes termos ou que publiquem conteúdo irregular.
+        ou encerrar contas que violem estes termos, seguindo as medidas descritas em
+        Descumprimento e punições.
       </p>
 
       <h2>Legislação</h2>
