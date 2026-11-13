@@ -6364,17 +6364,6 @@ body {
 .home-faq summary::-webkit-details-marker {
   display: none;
 }
-.home-faq summary::after {
-  content: "+";
-  color: var(--support);
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1;
-  transition: transform 160ms;
-}
-.home-faq details[open] summary::after {
-  transform: rotate(45deg);
-}
 .home-faq p {
   margin: 10px 0 0;
   color: var(--muted);
@@ -7630,4 +7619,16 @@ body {
 }
 .user-mini > span {
   overflow: hidden;
+}
+
+/* Caixa de contato das dúvidas alinhada */
+.home-faq-help {
+  align-items: center;
+}
+.home-faq-help p {
+  margin: 0;
+}
+.home-faq-help svg {
+  flex: 0 0 auto;
+  color: #8a8f98;
 }
