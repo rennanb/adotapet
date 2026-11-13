@@ -7,7 +7,7 @@ Projeto interdisciplinar apresentado no 11º Congresso de Projetos Interdiscipli
 **Site em produção:** https://adotapet-conteex.vercel.app
 **Material do evento (artigo, banner, diagramas e telas):** [repositorio-conteex](repositorio-conteex)
 
-<img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/1.%20Ficha%20p%C3%BAblica%20do%20animal%20%28celular%29.png" width="230" alt="Ficha pública do animal no celular"> <img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/2.%20Painel%20da%20ONG.png" width="430" alt="Painel da ONG no computador">
+<img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/2.%20Painel%20da%20ONG.png" width="430" alt="Painel da ONG no computador">
 
 ## O problema
 
@@ -22,6 +22,8 @@ O projeto centraliza esse fluxo em uma aplicação web de uso simples, pensada p
 3. O sistema gera o QR Code do animal e o QR Code da ONG.
 4. Quem encontra o animal escaneia o código, abre a ficha pública sem login e envia o formulário de adoção.
 5. O pedido chega à ONG por e-mail, com documento em PDF e protocolo, e a ONG aprova ou recusa pelo painel.
+
+<img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/1.%20Ficha%20p%C3%BAblica%20do%20animal%20%28celular%29.png" width="230" alt="Ficha pública do animal no celular">
 
 ## Funcionalidades
 
