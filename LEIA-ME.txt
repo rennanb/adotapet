@@ -5,11 +5,9 @@ AdotaPet - pacote de atualizacao
 2. npm run dev, teste, commit e push.
 
 Correcoes desta versao:
-- Pets: filtro "Adotado" nao fica mais marcado sozinho; filtros voltaram a
-  funcionar com os status reais.
-- Pets: busca por nome na mesma linha do titulo e do botao +.
-- Pets: espaco entre filtros e os cards.
-- Cartaz PNG: QR menor no post e sem texto por cima, etiquetas em pilulas
-  que quebram linha em vez de cortar.
+- Solicitacoes e Pets: busca na direita do titulo e filtros logo abaixo.
+- Titulos do painel padronizados em 30px.
+- Pets: filtro Adotado nao fica mais marcado sozinho.
+- Cartaz PNG: QR sem sobrepor texto e etiquetas que quebram linha.
 - Cartaz de impressao: uma pagina so, com descricao e etiquetas.
 - Home: simulacao do celular e do painel proporcionais.

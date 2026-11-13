@@ -3101,7 +3101,7 @@ body {
   font-size: 12px;
 }
 .pet-list-header h1 {
-  font-size: 26px;
+  font-size: inherit;
 }
 .pet-add-button,
 .page-header .pet-add-button {
@@ -7497,5 +7497,29 @@ body {
   .pet-list-actions .search-box {
     width: 100%;
     max-width: none;
+  }
+}
+
+/* Cabeçalhos do painel: busca à direita e filtros logo abaixo */
+.panel-search {
+  width: 290px;
+  max-width: 290px;
+}
+.request-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 26px;
+}
+.pet-list-header h1,
+.page-header h1 {
+  font-size: 30px;
+  letter-spacing: -0.6px;
+}
+@media (max-width: 720px) {
+  .panel-search {
+    width: 100%;
+    max-width: none;
+    margin-top: 14px;
   }
 }

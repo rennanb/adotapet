@@ -1704,18 +1704,21 @@ export function RequestsPage() {
 
   return (
     <div className="dashboard-page">
-      <PageHeader title="Solicitações" eyebrow="Solicitações de adoção" />
-      <div className="filter-bar">
-        <label className="search-box">
-          <Search />
-          <input
-            aria-label="Buscar por nome ou protocolo"
-            placeholder="Buscar por nome ou protocolo"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-          />
-        </label>
-      </div>
+      <PageHeader
+        title="Solicitações"
+        eyebrow="Solicitações de adoção"
+        action={
+          <label className="search-box panel-search">
+            <Search />
+            <input
+              aria-label="Buscar por nome ou protocolo"
+              placeholder="Buscar por nome ou protocolo"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+            />
+          </label>
+        }
+      />
       <div className="filter-chips request-filters">
         {opcoes.map(([valor, label]) => {
           const tone =
