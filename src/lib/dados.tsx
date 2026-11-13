@@ -777,3 +777,88 @@ export async function buscarPetPublico(
     irmaos,
   };
 }
+
+/* ------------------------------------------------------------------ */
+/* Explorar: todas as ONGs e todos os pets                             */
+/* ------------------------------------------------------------------ */
+
+export type OngResumo = {
+  nome: string;
+  slug: string;
+  cidade: string | null;
+  uf: string | null;
+  sobre: string | null;
+  logo: string | null;
+  capa: string | null;
+  pets: number;
+};
+
+/** ONGs ativas na plataforma, com a contagem de pets disponíveis. */
+export async function listarOngsPublicas(): Promise<OngResumo[]> {
+  const [respostaOngs, respostaPets] = await Promise.all([
+    supabase.from("ongs").select(COLUNAS_ONG_PUBLICA).order("nome", { ascending: true }),
+    supabase.from("vw_pets_publicos").select("ong_slug"),
+  ]);
+
+  if (respostaOngs.error) {
+    console.error("Erro ao listar as ONGs:", respostaOngs.error);
+    return [];
+  }
+  if (respostaPets.error) console.error("Erro ao contar os pets:", respostaPets.error);
+
+  const contagem = new Map<string, number>();
+  for (const linha of (respostaPets.data ?? []) as { ong_slug: string }[]) {
+    contagem.set(linha.ong_slug, (contagem.get(linha.ong_slug) ?? 0) + 1);
+  }
+
+  return ((respostaOngs.data ?? []) as LinhaOngPublica[]).map((linha) => ({
+    nome: linha.nome,
+    slug: linha.slug,
+    cidade: linha.cidade,
+    uf: linha.uf,
+    sobre: linha.sobre,
+    logo: linha.logo_url,
+    capa: linha.capa_url,
+    pets: contagem.get(linha.slug) ?? 0,
+  }));
+}
+
+export type PetListado = {
+  pet: Pet;
+  especie: "cao" | "gato";
+  sexo: "macho" | "femea";
+  porte: "pequeno" | "medio" | "grande";
+  cidade: string | null;
+  uf: string | null;
+  ongNome: string;
+  ongSlug: string;
+};
+
+type LinhaPetListado = LinhaAnimal & { ong_nome: string; ong_slug: string };
+
+const COLUNAS_PET_LISTADO =
+  "id, slug, nome, especie, sexo, porte, idade_meses, foto_url, foto_enquadramento, temperamento, descricao, cidade, uf, ong_nome, ong_slug";
+
+/** Todos os pets disponíveis, de todas as ONGs ativas. */
+export async function listarPetsPublicos(): Promise<PetListado[]> {
+  const { data, error } = await supabase
+    .from("vw_pets_publicos")
+    .select(COLUNAS_PET_LISTADO)
+    .order("nome", { ascending: true });
+
+  if (error) {
+    console.error("Erro ao listar os pets públicos:", error);
+    return [];
+  }
+
+  return ((data ?? []) as unknown as LinhaPetListado[]).map((linha) => ({
+    pet: petParaCard({ ...linha, status: "disponivel" }),
+    especie: linha.especie,
+    sexo: linha.sexo,
+    porte: linha.porte,
+    cidade: linha.cidade,
+    uf: linha.uf,
+    ongNome: linha.ong_nome,
+    ongSlug: linha.ong_slug,
+  }));
+}

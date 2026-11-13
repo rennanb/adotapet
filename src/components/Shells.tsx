@@ -197,10 +197,25 @@ export function PublicTopbar({ overlay = false }: { overlay?: boolean }) {
   const { open } = useAbout();
   return (
     <header className={`public-topbar ${overlay ? "overlay" : ""}`}>
-      <Brand />
-      <button className="icon-button" aria-label="Sobre o projeto" onClick={open}>
-        <Info />
-      </button>
+      <div className="topbar-left">
+        <Brand />
+        <nav className="topbar-actions" aria-label="Explorar">
+          <NavLink to="/pets" className="topbar-link">
+            Pets
+          </NavLink>
+          <NavLink to="/ongs" className="topbar-link">
+            ONGs
+          </NavLink>
+        </nav>
+      </div>
+      <div className="topbar-right">
+        <NavLink to="/entrar" className="topbar-login">
+          Entrar
+        </NavLink>
+        <button className="icon-button" aria-label="Sobre o projeto" onClick={open}>
+          <Info />
+        </button>
+      </div>
     </header>
   );
 }
@@ -351,5 +366,40 @@ export function AboutTag() {
         <small>Conheça a ideia por trás do AdotaPet</small>
       </TagCard>
     </button>
+  );
+}
+
+export function PublicFooter() {
+  const { open } = useAbout();
+  return (
+    <footer className="public-footer">
+      <div className="public-footer-inner">
+        <div className="public-footer-brand">
+          <Brand />
+          <p>
+            Projeto interdisciplinar do 2º semestre de Engenharia de Software da FAM, apresentado no
+            CONTEEX 2026. ONGs cadastram os animais, divulgam por QR Code e recebem as solicitações
+            de adoção com protocolo.
+          </p>
+        </div>
+        <nav className="public-footer-links" aria-label="Links do projeto">
+          <Link to="/pets">Pets para adoção</Link>
+          <Link to="/ongs">ONGs</Link>
+          <button type="button" onClick={open}>
+            Sobre o projeto
+          </button>
+          <Link to="/entrar">Entrar</Link>
+          <Link to="/privacidade">Privacidade</Link>
+          <Link to="/termos">Termos de uso</Link>
+          <a href="https://github.com/rennanb/adotapet" target="_blank" rel="noopener noreferrer">
+            Código no GitHub
+          </a>
+        </nav>
+      </div>
+      <p className="public-footer-note">
+        AdotaPet é o nome fantasia do Sistema Web de Adoção Responsável. Os dados de quem se
+        candidata são usados apenas pela ONG responsável pelo animal.
+      </p>
+    </footer>
   );
 }

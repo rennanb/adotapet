@@ -272,6 +272,10 @@ export function LoginPage() {
           <Link className="text-link" to="/cadastro">
             Ainda não tem conta? <b>Crie a da sua ONG</b>
           </Link>
+          <p className="auth-explore">
+            Quer adotar? Veja os <Link to="/pets">pets disponíveis</Link> e conheça as{" "}
+            <Link to="/ongs">ONGs parceiras</Link>.
+          </p>
           <AboutTag />
           <footer className="auth-footer">
             Seus dados são protegidos pela LGPD · <Link to="/privacidade">Privacidade</Link> ·{" "}

@@ -5,7 +5,15 @@ import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
 import { petObjectPosition, type Pet } from "../mocks";
 import { Badge, Button, StatusBadge, TagCard } from "./ui";
 
-export function PetCard({ pet, compact = false }: { pet: Pet; compact?: boolean }) {
+export function PetCard({
+  pet,
+  compact = false,
+  nota,
+}: {
+  pet: Pet;
+  compact?: boolean;
+  nota?: string;
+}) {
   return (
     <Link to={`/pet/${pet.slug}`} className={`pet-card ${compact ? "compact" : ""}`}>
       <div className="pet-photo duotone">
@@ -23,6 +31,7 @@ export function PetCard({ pet, compact = false }: { pet: Pet; compact?: boolean 
         <p>
           {pet.species} · {pet.sex} · {pet.size} · {pet.age}
         </p>
+        {nota && <small className="pet-card-nota">{nota}</small>}
       </div>
     </Link>
   );

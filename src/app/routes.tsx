@@ -14,6 +14,7 @@ import {
   UnavailablePage,
 } from "../pages/PublicPages";
 import { PrivacidadePage, TermosPage } from "../pages/LegalPages";
+import { OngsPublicPage, PetsPublicPage } from "../pages/ExplorePages";
 import {
   ConfigPage,
   DashboardPage,
@@ -34,6 +35,8 @@ export const router = createBrowserRouter([
       { path: "entrar", Component: LoginPage },
       { path: "entrar/codigo", Component: CodePage },
       { path: "cadastro", Component: SignupPage },
+      { path: "ongs", Component: OngsPublicPage },
+      { path: "pets", Component: PetsPublicPage },
       { path: "ong/:slug", Component: OngPage },
       { path: "pet-indisponivel", Component: UnavailablePage },
       { path: "pet/:slug", Component: PetPage },
