@@ -167,7 +167,7 @@ export function QrActions(props: QrActionProps) {
     context.font = "700 34px Poppins";
     context.fillText("AdotaPet", 72, 92);
     const photoY = 130;
-    const photoHeight = format === "post" ? 500 : 920;
+    const photoHeight = format === "post" ? 500 : 1080;
     if (pet) {
       const image = new Image();
       image.crossOrigin = "anonymous";
@@ -227,7 +227,7 @@ export function QrActions(props: QrActionProps) {
         context.stroke();
       }
     }
-    const contentY = photoY + photoHeight + (format === "story" ? 108 : 82);
+    const contentY = photoY + photoHeight + (format === "story" ? 120 : 82);
     context.fillStyle = "#15181e";
     context.font = "700 48px Poppins";
     context.fillText(displayName, 64, contentY);
@@ -238,7 +238,8 @@ export function QrActions(props: QrActionProps) {
       contentY + 46,
     );
     const qr = qrRef.current;
-    if (qr) context.drawImage(qr, logicalWidth - 274, contentY - 46, 210, 210);
+    const qrLado = format === "story" ? 210 : 170;
+    if (qr) context.drawImage(qr, logicalWidth - 64 - qrLado, contentY - 46, qrLado, qrLado);
     if (pet) {
       const description = pet.description || "";
       context.fillStyle = "#15181e";
@@ -252,7 +253,7 @@ export function QrActions(props: QrActionProps) {
             description,
             64,
             contentY + 134,
-            650,
+            620,
             format === "story" ? 34 : 27,
             format === "story" ? 4 : 2,
           )
@@ -261,24 +262,27 @@ export function QrActions(props: QrActionProps) {
             `${pet.species}, ${pet.sex}, porte ${pet.size.toLowerCase()}, ${pet.age}.`,
             64,
             contentY + 134,
-            650,
+            620,
             format === "story" ? 38 : 30,
             2,
           );
       const chips = (pet.temperament ?? []).slice(0, format === "story" ? 3 : 2);
       let chipX = 64;
+      let chipY = textEnd + 22;
       chips.forEach((chip) => {
-        context.font = "500 17px Inter";
-        const chipWidth = context.measureText(chip).width + 30;
-        context.fillStyle = "#ffffff";
-        context.strokeStyle = "#e7e5df";
+        context.font = "600 18px Inter";
+        const chipWidth = Math.min(context.measureText(chip).width + 42, 320);
+        if (chipX + chipWidth > logicalWidth - 64) {
+          chipX = 64;
+          chipY += 56;
+        }
+        context.fillStyle = "#f1f2f4";
         context.beginPath();
-        context.roundRect(chipX, textEnd + 16, chipWidth, 38, 9);
+        context.roundRect(chipX, chipY, chipWidth, 44, 22);
         context.fill();
-        context.stroke();
         context.fillStyle = "#3f3f46";
-        context.fillText(chip, chipX + 15, textEnd + 41);
-        chipX += chipWidth + 10;
+        context.fillText(chip, chipX + 21, chipY + 29);
+        chipX += chipWidth + 12;
       });
     } else {
       const sobre = (ongData?.about || "").trim();
@@ -293,7 +297,7 @@ export function QrActions(props: QrActionProps) {
           "Somos uma ONG de proteção animal. Escaneie o QR para conhecer todos os pets disponíveis e iniciar uma adoção responsável.",
         64,
         contentY + 134,
-        650,
+        620,
         format === "story" ? 33 : 26,
         format === "story" ? 4 : 3,
       );
@@ -304,18 +308,21 @@ export function QrActions(props: QrActionProps) {
           : "Adoção responsável",
       ];
       let chipX = 64;
+      let chipY = fimTexto + 22;
       chipsOng.forEach((chip) => {
-        context.font = "500 17px Inter";
-        const largura = context.measureText(chip).width + 30;
-        context.fillStyle = "#ffffff";
-        context.strokeStyle = "#e7e5df";
+        context.font = "600 18px Inter";
+        const largura = Math.min(context.measureText(chip).width + 42, 320);
+        if (chipX + largura > logicalWidth - 64) {
+          chipX = 64;
+          chipY += 56;
+        }
+        context.fillStyle = "#f1f2f4";
         context.beginPath();
-        context.roundRect(chipX, fimTexto + 16, largura, 38, 9);
+        context.roundRect(chipX, chipY, largura, 44, 22);
         context.fill();
-        context.stroke();
         context.fillStyle = "#3f3f46";
-        context.fillText(chip, chipX + 15, fimTexto + 41);
-        chipX += largura + 10;
+        context.fillText(chip, chipX + 21, chipY + 29);
+        chipX += largura + 12;
       });
     }
     context.fillStyle = "#6b7280";
@@ -466,25 +473,39 @@ export function QrActions(props: QrActionProps) {
               alt=""
               style={{ objectPosition: petObjectPosition(pet, "hero") }}
             />
-            <h1>{pet.name}</h1>
-            <dl>
-              <div>
-                <dt>Espécie</dt>
-                <dd>{pet.species}</dd>
+            <div className="print-title">
+              <h1>{pet.name}</h1>
+              <dl>
+                <div>
+                  <dt>Espécie</dt>
+                  <dd>{pet.species}</dd>
+                </div>
+                <div>
+                  <dt>Sexo</dt>
+                  <dd>{pet.sex}</dd>
+                </div>
+                <div>
+                  <dt>Porte</dt>
+                  <dd>{pet.size}</dd>
+                </div>
+                <div>
+                  <dt>Idade</dt>
+                  <dd>{pet.age}</dd>
+                </div>
+              </dl>
+            </div>
+            {(pet.description || (pet.temperament && pet.temperament.length > 0)) && (
+              <div className="print-extra">
+                {pet.description && <p>{pet.description}</p>}
+                {pet.temperament && pet.temperament.length > 0 && (
+                  <div className="print-chips">
+                    {pet.temperament.slice(0, 5).map((marca) => (
+                      <span key={marca}>{marca}</span>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div>
-                <dt>Sexo</dt>
-                <dd>{pet.sex}</dd>
-              </div>
-              <div>
-                <dt>Porte</dt>
-                <dd>{pet.size}</dd>
-              </div>
-              <div>
-                <dt>Idade</dt>
-                <dd>{pet.age}</dd>
-              </div>
-            </dl>
+            )}
           </>
         ) : (
           <>
@@ -497,7 +518,9 @@ export function QrActions(props: QrActionProps) {
             {ongData?.about && <p className="print-ong-about">{ongData.about}</p>}
           </>
         )}
-        <QRCodeSVG value={url} size={220} includeMargin level="M" fgColor="#101010" />
+        <div className="print-qr">
+          <QRCodeSVG value={url} size={170} includeMargin level="M" fgColor="#101010" />
+        </div>
         <footer>
           <span>{url}</span>
           <b>Adote, não compre</b>

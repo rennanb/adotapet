@@ -449,40 +449,49 @@ export function PetsPage() {
         eyebrow={`${meusPets.length} ${meusPets.length === 1 ? "animal cadastrado" : "animais cadastrados"}`}
         className="pet-list-header"
         action={
-          <Link
-            className="button button-primary pet-add-button"
-            to="/painel/animais/novo"
-            aria-label="Cadastrar novo pet"
-          >
-            <Plus />
-          </Link>
+          <div className="pet-list-actions">
+            <label className="search-box">
+              <Search />
+              <input
+                aria-label="Buscar por nome"
+                placeholder="Buscar por nome"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </label>
+            <Link
+              className="button button-primary pet-add-button"
+              to="/painel/animais/novo"
+              aria-label="Cadastrar novo pet"
+            >
+              <Plus />
+            </Link>
+          </div>
         }
       />
       <div className="filter-bar">
-        <label className="search-box">
-          <Search />
-          <input
-            aria-label="Buscar por nome"
-            placeholder="Buscar por nome"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </label>
         <div className="filter-chips">
-          {["todos", "disponível", "em processo", "adotado", "indisponível"].map((x) => {
-            const tone = x === "disponível" ? "green" : x === "em processo" ? "amber" : "gray";
+          {[
+            ["todos", "Todos"],
+            ["disponível", "Disponível"],
+            ["em processo", "Em processo"],
+            ["adotado", "Adotado"],
+            ["indisponível", "Indisponível"],
+          ].map(([valor, rotulo]) => {
+            const tone =
+              valor === "disponível" ? "green" : valor === "em processo" ? "amber" : "gray";
             return (
               <button
-                key={x}
-                className={`${filter === x ? "active" : ""} ${x === "adotado" ? "adopted-filter" : ""}`}
-                onClick={() => setFilter(x)}
+                key={valor}
+                className={filter === valor ? "active" : ""}
+                onClick={() => setFilter(valor)}
               >
-                {x === "adotado" ? (
+                {valor === "adotado" ? (
                   <Check className="filter-check" aria-hidden="true" />
                 ) : (
                   <span className={`filter-dot status-${tone}`} aria-hidden="true" />
                 )}
-                {x.charAt(0).toUpperCase() + x.slice(1)}
+                {rotulo}
               </button>
             );
           })}

@@ -1,16 +1,15 @@
 AdotaPet - pacote de atualizacao
 ================================
 
-1. RODE O SQL PRIMEIRO (resolve a lista de ONGs vazia):
-   No Supabase, SQL Editor, cole e rode: 011_filtro_fotos.sql
-   O 010_denuncias.sql voce ja rodou.
+1. Extraia dentro de C:\Users\qualidade01\dev\adotapet (substitui src e public)
+2. npm run dev, teste, commit e push.
 
-2. Extraia o conteudo desta pasta dentro de C:\Users\qualidade01\dev\adotapet
-   (substitui as pastas src e public).
-
-3. npm run dev para testar, depois commit e push.
-
-O que mudou nesta versao:
-- Lista de ONGs e fichas de pets voltam a carregar mesmo se a coluna nova
-  ainda nao existir no banco (consulta tolerante).
-- Simulacao do celular e do painel na pagina inicial com proporcoes corretas.
+Correcoes desta versao:
+- Pets: filtro "Adotado" nao fica mais marcado sozinho; filtros voltaram a
+  funcionar com os status reais.
+- Pets: busca por nome na mesma linha do titulo e do botao +.
+- Pets: espaco entre filtros e os cards.
+- Cartaz PNG: QR menor no post e sem texto por cima, etiquetas em pilulas
+  que quebram linha em vez de cortar.
+- Cartaz de impressao: uma pagina so, com descricao e etiquetas.
+- Home: simulacao do celular e do painel proporcionais.
