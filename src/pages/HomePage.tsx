@@ -122,7 +122,7 @@ function PreviaCelular() {
           <span className="home-phone-hour">9:41</span>
         </div>
         <div className="home-phone-photo">
-          <img src={photos.caramelo} alt="" style={{ objectPosition: "50% 58%" }} />
+          <img src={photos.caramelo} alt="" style={{ objectPosition: "50% 72%" }} />
           <span className="home-pill-status">Disponível</span>
         </div>
         <div className="home-phone-body">

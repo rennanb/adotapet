@@ -1,13 +1,16 @@
-Pacote de atualização do AdotaPet
-=================================
+AdotaPet - pacote de atualizacao
+================================
 
-1. Extraia o conteúdo desta pasta dentro de C:\Users\qualidade01\dev\adotapet
-   (vai substituir as pastas src e public).
-2. No Supabase, rode os dois SQLs desta pasta, nesta ordem:
-   - 010_denuncias.sql    (tabela de denúncias)
-   - 011_filtro_fotos.sql (opção de filtro por ONG)
-   O 010 você já rodou, então pode pular. O 011 é novo.
-3. No terminal, dentro do projeto: npm run dev
-4. Teste: abra uma ficha, clique em "Denunciar esta ficha", envie e confira
-   a tabela denuncias no Supabase. Depois vá em Dados da ONG e troque o
-   filtro das fotos para ver a diferença na ficha.
+1. RODE O SQL PRIMEIRO (resolve a lista de ONGs vazia):
+   No Supabase, SQL Editor, cole e rode: 011_filtro_fotos.sql
+   O 010_denuncias.sql voce ja rodou.
+
+2. Extraia o conteudo desta pasta dentro de C:\Users\qualidade01\dev\adotapet
+   (substitui as pastas src e public).
+
+3. npm run dev para testar, depois commit e push.
+
+O que mudou nesta versao:
+- Lista de ONGs e fichas de pets voltam a carregar mesmo se a coluna nova
+  ainda nao existir no banco (consulta tolerante).
+- Simulacao do celular e do painel na pagina inicial com proporcoes corretas.

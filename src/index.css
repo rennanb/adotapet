@@ -6892,9 +6892,13 @@ body {
 .home-stage-phone .home-preview-label {
   text-align: center;
 }
+.home-stage-browser .home-preview-label {
+  max-width: 560px;
+  margin: 0 auto 12px;
+}
 .home-phone {
   position: relative;
-  width: 212px;
+  width: 200px;
   margin: 0 auto;
   padding: 8px;
   background: #15181e;
@@ -6940,7 +6944,7 @@ body {
 }
 .home-phone-photo {
   position: relative;
-  height: 134px;
+  height: 196px;
 }
 .home-phone-photo img {
   width: 100%;
@@ -6959,7 +6963,7 @@ body {
   font-weight: 700;
 }
 .home-phone-body {
-  padding: 10px 11px 12px;
+  padding: 12px 12px 14px;
 }
 .home-phone-label {
   margin: 0;
@@ -7005,6 +7009,8 @@ body {
   font-weight: 700;
 }
 .home-browser {
+  max-width: 560px;
+  margin: 0 auto;
   overflow: hidden;
   background: #fff;
   border: 1px solid #e6e8ec;

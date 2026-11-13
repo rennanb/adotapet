@@ -44,7 +44,7 @@ const ContextoOng = createContext<ValorOng>({
 });
 
 const COLUNAS =
-  "id, slug, nome, email, whatsapp, cidade, uf, sobre, site_instagram, endereco, logo_url, capa_url, status, filtro_fotos";
+  "*";
 
 export function OngProvider({ children }: { children: ReactNode }) {
   const { sessao } = useAuth();
@@ -680,8 +680,7 @@ export type OngPublica = {
   filtroFotos: number;
 };
 
-const COLUNAS_ONG_PUBLICA =
-  "nome, slug, cidade, uf, sobre, whatsapp, email, logo_url, capa_url, filtro_fotos";
+const COLUNAS_ONG_PUBLICA = "*";
 
 type LinhaOngPublica = {
   nome: string;
