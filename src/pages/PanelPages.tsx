@@ -1537,7 +1537,22 @@ export function OngSettingsPage() {
                 evento.target.value = "";
               }}
             />
-            <small>Aparece no topo da sua página pública. Formato 3 por 1.</small>
+            {minhaOng.capa_url && (
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => {
+                  void salvar({ capa_url: null });
+                }}
+                disabled={enviandoCapa}
+              >
+                Remover capa e usar a foto de um pet
+              </button>
+            )}
+            <small>
+              Aparece no topo da sua página pública. Formato 3 por 1. Sem capa, usamos a foto do
+              primeiro animal cadastrado.
+            </small>
           </div>
           <div className="ong-cover-field">
             <span className="field-label">Logo da ONG</span>

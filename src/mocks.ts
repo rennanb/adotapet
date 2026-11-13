@@ -24,13 +24,11 @@ export const petObjectPosition = (pet: Pick<Pet, "focal">, context: "card" | "he
 };
 
 export const photos = {
-  caramelo:
-    "https://images.unsplash.com/photo-1580629607699-5d97e8cb43d6?auto=format&fit=crop&w=1400&q=85",
-  mel: "https://images.unsplash.com/photo-1645254698439-09dd820ebff5?auto=format&fit=crop&w=1000&q=85",
-  tigrao:
-    "https://images.unsplash.com/photo-1551264783-4ad68886cf54?auto=format&fit=crop&w=1000&q=85",
-  nina: "https://images.unsplash.com/photo-1478029973231-f42d99fe5c20?auto=format&fit=crop&w=1000&q=85",
-  gato: "https://images.unsplash.com/photo-1625106828405-07e0e4457c1a?auto=format&fit=crop&w=1000&q=85",
+  caramelo: "/pets/caramelo.jpg",
+  mel: "/pets/mel.jpg",
+  tigrao: "/pets/tigrao.jpg",
+  nina: "/pets/nina.jpg",
+  gato: "/pets/bento.jpg",
 };
 
 export const pets: Pet[] = [

@@ -68,21 +68,21 @@ const authSlides = [
     title: "Cadastre o pet em dois minutos.",
     pill: "Foto, ficha e história em um só lugar",
     image:
-      "https://images.unsplash.com/photo-1753685728459-d443fca74862?auto=format&fit=crop&w=1400&q=85",
+      "/pets/caramelo.jpg",
     position: "50% 40%",
   },
   {
     title: "Um link conta a história dele.",
     pill: "QR code no cartaz, link no WhatsApp e no Instagram",
     image:
-      "https://images.unsplash.com/photo-1667716705760-233650f8f3fe?auto=format&fit=crop&w=1400&q=85",
+      "/pets/nina.jpg",
     position: "50% 36%",
   },
   {
     title: "A adoção chega direto na sua ONG.",
     pill: "A pessoa preenche, você recebe e dá continuidade",
     image:
-      "https://images.unsplash.com/photo-1724120504738-df4853569270?auto=format&fit=crop&w=1400&q=85",
+      "/pets/mel.jpg",
     position: "50% 40%",
   },
 ];
@@ -702,6 +702,7 @@ export function OngPage() {
   const { share, message } = useShare();
   const [carregando, setCarregando] = useState(true);
   const [dados, setDados] = useState<DadosOng | null>(null);
+  const [capaQuebrada, setCapaQuebrada] = useState(false);
 
   useEffect(() => {
     let ativo = true;
@@ -756,7 +757,8 @@ export function OngPage() {
   const { ong: ongPublica, pets: petsDaOng } = dados;
   const disponiveis = petsDaOng.filter((pet) => pet.status === "disponível");
   const local = cidadeComUf(ongPublica.cidade, ongPublica.uf);
-  const capa = ongPublica.capa || petsDaOng[0]?.foto || photos.caramelo;
+  const fotoDePet = petsDaOng.find((pet) => pet.image)?.image;
+  const capa = (!capaQuebrada && ongPublica.capa) || fotoDePet || photos.caramelo;
   const url = `${getPublicBaseUrl()}/ong/${ongPublica.slug}`;
   const whatsapp = ongPublica.whatsapp ? linkDoWhatsapp(ongPublica.whatsapp) : null;
   const whatsappUrl = whatsapp
@@ -773,6 +775,7 @@ export function OngPage() {
           src={capa}
           alt={`Capa do perfil da ${ongPublica.nome}`}
           style={{ objectPosition: "50% 30%" }}
+          onError={() => setCapaQuebrada(true)}
         />
       </section>
       <div className="content-1100 ong-profile">
@@ -1111,7 +1114,7 @@ export function PetPage() {
           </section>
           <div className="report-row">
             <span>Encontrou algo errado nesta ficha?</span>
-            <ReportButton tipo="pet" nome={pet.nome} slug={pet.slug} ongSlug={ongPublica.slug} />
+            <ReportButton tipo="pet" nome={pet.name} slug={pet.slug} ongSlug={ongPublica.slug} />
           </div>
         </div>
       </div>
@@ -1430,14 +1433,15 @@ export function AdoptPage() {
                 required
               />
               <TextField
-                label="Com quantas pessoas você mora? *"
+                label="Quantas pessoas moram no local, contando com você? *"
                 name="pessoas"
                 type="number"
                 min={1}
                 max={20}
                 value={form.pessoas}
                 onChange={campo("pessoas")}
-                placeholder="Ex.: 2"
+                placeholder="Ex.: 1"
+                hint="Se você mora sozinho, informe 1."
                 required
               />
             </div>

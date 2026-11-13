@@ -338,6 +338,7 @@ body {
   gap: 10px;
 }
 .radio-card {
+  position: relative;
   min-height: 52px;
   display: grid;
   place-items: center;
@@ -348,7 +349,12 @@ body {
 }
 .radio-card input {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
   opacity: 0;
+  cursor: pointer;
 }
 .radio-card.selected {
   border-color: var(--brand-dark);
@@ -765,10 +771,11 @@ body {
   margin: auto;
   display: grid;
   place-items: center;
-  color: #6f3b00;
+  color: #1f7a4d;
   font: 700 28px Poppins;
   border-radius: 25px;
-  background: var(--brand-soft);
+  background: #e8f5ec;
+  border: 1px solid #cbe7d5;
   transform: rotate(-4deg);
 }
 .code-inputs {
@@ -3017,7 +3024,6 @@ body {
 }
 .pet-photo img,
 .admin-pet-card > img,
-.select-pets img,
 .adopt-pet-mini img,
 .pet-mini img,
 .photo-preview img,
@@ -7631,4 +7637,34 @@ body {
 .home-faq-help svg {
   flex: 0 0 auto;
   color: #8a8f98;
+}
+
+
+/* Seleção de pets na solicitação de adoção */
+.select-pets label > img {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  max-width: 64px;
+  object-fit: cover;
+  border-radius: 13px;
+}
+.select-pets label > span:not(.select-check) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+
+/* Legendas dos grupos de filtro */
+.filter-group {
+  display: grid;
+  gap: 6px;
+}
+.filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--support);
+  padding-left: 2px;
 }

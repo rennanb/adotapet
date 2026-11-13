@@ -170,9 +170,7 @@ export function petParaCard(linha: LinhaAnimal): Pet {
     age: idadeEmTexto(linha.idade_meses),
     size: linha.porte === "pequeno" ? "Pequeno" : linha.porte === "grande" ? "Grande" : "Médio",
     status: ROTULO_STATUS[linha.status],
-    image:
-      linha.foto_url ??
-      "https://images.unsplash.com/photo-1580629607699-5d97e8cb43d6?auto=format&fit=crop&w=1400&q=85",
+    image: linha.foto_url ?? "/pets/caramelo.jpg",
     focal: FOCAL[linha.foto_enquadramento],
     temperament: linha.temperamento ?? [],
     description: linha.descricao ?? undefined,

@@ -219,34 +219,43 @@ export function PetsPublicPage() {
             />
           </div>
           <div className="filter-groups">
-          <div className="chip-row" role="group" aria-label="Espécie">
-            {ESPECIES.map((opcao) => (
-              <Chip
-                key={opcao.valor}
-                ativo={especie === opcao.valor}
-                onClick={() => setEspecie(opcao.valor)}
-              >
-                {opcao.rotulo}
-              </Chip>
-            ))}
+          <div className="filter-group">
+            <span className="filter-label">Espécie</span>
+            <div className="chip-row" role="group" aria-label="Espécie">
+              {ESPECIES.map((opcao) => (
+                <Chip
+                  key={opcao.valor}
+                  ativo={especie === opcao.valor}
+                  onClick={() => setEspecie(opcao.valor)}
+                >
+                  {opcao.rotulo}
+                </Chip>
+              ))}
+            </div>
           </div>
-          <div className="chip-row" role="group" aria-label="Sexo">
-            {SEXOS.map((opcao) => (
-              <Chip key={opcao.valor} ativo={sexo === opcao.valor} onClick={() => setSexo(opcao.valor)}>
-                {opcao.rotulo}
-              </Chip>
-            ))}
+          <div className="filter-group">
+            <span className="filter-label">Sexo</span>
+            <div className="chip-row" role="group" aria-label="Sexo">
+              {SEXOS.map((opcao) => (
+                <Chip key={opcao.valor} ativo={sexo === opcao.valor} onClick={() => setSexo(opcao.valor)}>
+                  {opcao.rotulo}
+                </Chip>
+              ))}
+            </div>
           </div>
-          <div className="chip-row" role="group" aria-label="Porte">
-            {PORTES.map((opcao) => (
-              <Chip
-                key={opcao.valor}
-                ativo={porte === opcao.valor}
-                onClick={() => setPorte(opcao.valor)}
-              >
-                {opcao.rotulo}
-              </Chip>
-            ))}
+          <div className="filter-group">
+            <span className="filter-label">Porte</span>
+            <div className="chip-row" role="group" aria-label="Porte">
+              {PORTES.map((opcao) => (
+                <Chip
+                  key={opcao.valor}
+                  ativo={porte === opcao.valor}
+                  onClick={() => setPorte(opcao.valor)}
+                >
+                  {opcao.rotulo}
+                </Chip>
+              ))}
+            </div>
           </div>
           </div>
         </div>
