@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { Outlet, Link, NavLink, useLocation, useRouteError } from "react-router";
+import { useOng } from "../lib/dados";
 import {
   Code2,
   HeartHandshake,
@@ -229,6 +230,17 @@ const nav = [
 
 export function DashboardShell() {
   const { open } = useAbout();
+  const { ong: ongDaSessao } = useOng();
+  const nomeOng = ongDaSessao?.nome ?? "Sua ONG";
+  const localOng = ongDaSessao?.cidade
+    ? `${ongDaSessao.cidade}${ongDaSessao.uf ? `/${ongDaSessao.uf}` : ""}`
+    : "Equipe da ONG";
+  const iniciaisOng = nomeOng
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((parte) => parte[0]?.toUpperCase())
+    .join("");
   const [maisAberto, setMaisAberto] = useState(false);
   return (
     <div className="dashboard-shell">
@@ -255,10 +267,16 @@ export function DashboardShell() {
             Sobre
           </button>
           <div className="user-mini">
-            <span>AP</span>
+            <span>
+              {ongDaSessao?.logo_url ? (
+                <img src={ongDaSessao.logo_url} alt="" />
+              ) : (
+                iniciaisOng || "AP"
+              )}
+            </span>
             <p>
-              <b>Amigos de Patas</b>
-              <small>Equipe da ONG</small>
+              <b>{nomeOng}</b>
+              <small>{localOng}</small>
             </p>
           </div>
         </div>

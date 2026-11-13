@@ -1500,9 +1500,7 @@ export function OngSettingsPage() {
               className="filter-preview-image duotone"
               style={{ "--duo": String(filtro / 100) } as React.CSSProperties}
             >
-              {minhaOng.capa_url || minhaOng.logo_url ? (
-                <img src={(minhaOng.capa_url ?? minhaOng.logo_url) || ""} alt="" />
-              ) : null}
+              <img src={minhaOng.capa_url ?? minhaOng.logo_url ?? photos.caramelo} alt="" />
             </div>
             <small>
               Prévia com o filtro selecionado. A foto original nunca é alterada, o tom aparece apenas

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Copy, Download, ExternalLink, Printer, QrCode as QrIcon } from "lucide-react";
 import { Link } from "react-router";
 import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
-import { petObjectPosition, type Pet } from "../mocks";
+import { petObjectPosition, photos, type Pet } from "../mocks";
 import { Badge, Button, StatusBadge, TagCard } from "./ui";
 
 export function PetCard({
@@ -179,10 +179,10 @@ export function QrActions(props: QrActionProps) {
       context.clip();
       drawCover(context, image, 56, photoY, logicalWidth - 112, photoHeight);
       context.restore();
-    } else if (ongData?.cover) {
+    } else if (ongData?.cover || photos.caramelo) {
       const cover = new Image();
       cover.crossOrigin = "anonymous";
-      cover.src = ongData.cover;
+      cover.src = ongData?.cover ?? photos.caramelo;
       await cover.decode();
       context.save();
       context.beginPath();

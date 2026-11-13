@@ -756,7 +756,7 @@ export function OngPage() {
   const { ong: ongPublica, pets: petsDaOng } = dados;
   const disponiveis = petsDaOng.filter((pet) => pet.status === "disponível");
   const local = cidadeComUf(ongPublica.cidade, ongPublica.uf);
-  const capa = ongPublica.capa || photos.caramelo;
+  const capa = ongPublica.capa || petsDaOng[0]?.foto || photos.caramelo;
   const url = `${getPublicBaseUrl()}/ong/${ongPublica.slug}`;
   const whatsapp = ongPublica.whatsapp ? linkDoWhatsapp(ongPublica.whatsapp) : null;
   const whatsappUrl = whatsapp
