@@ -7,13 +7,15 @@ Projeto interdisciplinar apresentado no 11º Congresso de Projetos Interdiscipli
 **Site em produção:** https://adotapet-conteex.vercel.app
 **Material do evento (artigo, banner, diagramas e telas):** [repositorio-conteex](repositorio-conteex)
 
-<img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/1.%20Ficha%20p%C3%BAblica%20do%20animal%20%28celular%29.png" width="230" alt="Ficha pública do animal no celular"> <img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/2.%20Painel%20da%20ONG.png" width="430" alt="Painel da ONG no computador">
+<img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/2.%20Painel%20da%20ONG.png" width="430" alt="Painel da ONG no computador">
 
 ## O problema
 
 O abandono de cães e gatos é um problema de saúde pública e de bem-estar animal no Brasil. As ONGs que resgatam esses animais têm dificuldade para divulgar fichas atualizadas e para organizar os pedidos de adoção, que chegam espalhados por redes sociais, WhatsApp e comentários. Sem um registro único, a ONG repete informação e perde o contato de quem se interessou.
 
 O projeto centraliza esse fluxo em uma aplicação web de uso simples, pensada para ONGs pequenas, que não têm sistema nem equipe técnica.
+
+<img src="repositorio-conteex/05%20-%20Telas%20ou%20V%C3%ADdeos/1.%20Ficha%20p%C3%BAblica%20do%20animal%20%28celular%29.png" width="230" alt="Ficha pública do animal no celular"> 
 
 ## Como funciona
 
