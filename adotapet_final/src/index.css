@@ -7675,3 +7675,34 @@ body {
   line-height: 1.55;
   color: #52525b;
 }
+
+.export-resultado {
+  margin: 14px 0 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.export-resultado img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+.export-resultado figcaption {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #52525b;
+  text-align: center;
+}
+
+.export-resultado a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+}

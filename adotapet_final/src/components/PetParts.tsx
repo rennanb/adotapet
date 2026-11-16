@@ -104,6 +104,9 @@ export function QrActions(props: QrActionProps) {
   const svgRef = useRef<HTMLDivElement>(null);
   const [qrSize, setQrSize] = useState(1024);
   const [aviso, setAviso] = useState<string | null>(null);
+  const [resultado, setResultado] = useState<{ url: string; nome: string } | null>(null);
+  const resultadoAnterior = useRef<string | null>(null);
+  const resultadoRef = useRef<HTMLElement | null>(null);
   const drawCover = (
     context: CanvasRenderingContext2D,
     image: HTMLImageElement,
@@ -180,6 +183,16 @@ export function QrActions(props: QrActionProps) {
       image.onerror = () => reject(new Error(`Falha ao carregar a imagem: ${src}`));
       image.src = src;
     });
+  const mostrarResultado = (blob: Blob, nome: string) => {
+    if (resultadoAnterior.current) URL.revokeObjectURL(resultadoAnterior.current);
+    const url = URL.createObjectURL(blob);
+    resultadoAnterior.current = url;
+    setResultado({ url, nome });
+    window.setTimeout(() => {
+      resultadoRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 80);
+  };
+
   const salvarImagem = async (canvas: HTMLCanvasElement, nome: string) => {
     try {
       const blob = await new Promise<Blob | null>((resolve) =>
@@ -190,24 +203,28 @@ export function QrActions(props: QrActionProps) {
       const podeCompartilhar =
         typeof navigator.canShare === "function" && navigator.canShare({ files: [arquivo] });
       if (podeCompartilhar) {
-        await navigator.share({ files: [arquivo], title: nome });
-        setAviso(null);
-        return;
+        try {
+          await navigator.share({ files: [arquivo], title: nome });
+          setAviso(null);
+          return;
+        } catch (erroCompartilhar) {
+          if (erroCompartilhar instanceof Error && erroCompartilhar.name === "AbortError") {
+            setAviso(null);
+            return;
+          }
+          // Navegadores como o Chrome no iPhone expõem o compartilhamento mas não enviam o arquivo.
+        }
       }
-      const endereco = URL.createObjectURL(blob);
       const ehIOS =
         /iP(hone|ad|od)/.test(navigator.userAgent) ||
         (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
       if (ehIOS) {
-        // O Safari do iPhone ignora o atributo download: abrimos a imagem para salvar pela galeria.
-        const janela = window.open(endereco, "_blank");
-        setAviso(
-          janela
-            ? "A imagem abriu em outra aba. Toque e segure para salvar na galeria."
-            : "Permita janelas pop-up para abrir a imagem e salvá-la na galeria.",
-        );
+        // No iPhone nenhum navegador baixa o arquivo direto: mostramos a imagem para salvar pela galeria.
+        mostrarResultado(blob, nome);
+        setAviso("Imagem pronta para salvar.");
         return;
       }
+      const endereco = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = endereco;
       link.download = nome;
@@ -512,6 +529,17 @@ export function QrActions(props: QrActionProps) {
         <p className="export-aviso" role="status">
           {aviso}
         </p>
+      )}
+      {resultado && (
+        <figure className="export-resultado" ref={resultadoRef}>
+          <img src={resultado.url} alt="Imagem gerada para salvar no celular" />
+          <figcaption>
+            Toque e segure a imagem para salvar na galeria.{" "}
+            <a href={resultado.url} download={resultado.nome} target="_blank" rel="noopener">
+              Abrir em tela cheia
+            </a>
+          </figcaption>
+        </figure>
       )}
       <QRCodeCanvas
         ref={qrRef}
